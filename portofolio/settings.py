@@ -14,6 +14,7 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 SECRET_KEY = 'django-insecure-p*g&t)kdftu7zrhz$_@kd#cks7kl!weoxy@s5m^$c_e!lpwq17'
@@ -73,11 +74,11 @@ if PRODUCTION:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('DB_NAME'),
-            'USER': os.getenv('DB_USER'),
-            'PASSWORD': os.getenv('DB_PASSWORD'),
-            'HOST': os.getenv('DB_HOST'),
-            'PORT': os.getenv('DB_PORT'),
+            'NAME': os.getenv('DB_NAME','mohammad.zaky'),
+            'USER': os.getenv('DB_USER','mohammad.zaky'),
+            'PASSWORD': os.getenv('DB_PASSWORD','IDja1zmj'),
+            'HOST': os.getenv('DB_HOST','10.119.106.139'),
+            'PORT': os.getenv('DB_PORT','5432'),
             'OPTIONS': {
                 'options': f"-c search_path={os.getenv('SCHEMA', 'public')}"
             }
