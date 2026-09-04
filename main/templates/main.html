@@ -12,16 +12,19 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
+    <!-- HEADER / NAVBAR -->
     <header class="site-header">
         <div class="container">
             <a href="#profile" class="brand">{{ name }}</a>
             <nav>
                 <a href="#profile">Profile</a>
+                <a href="#education">Education</a>
             </nav>
         </div>
     </header>
 
     <main>
+        <!-- SECTION PROFILE / ABOUT ME -->
         <section class="hero" id="profile">
             <div class="container hero-grid">
                 <div class="hero-identity">
@@ -45,15 +48,69 @@
                         </div>
                     </dl>
                     <div class="social-links">
-                        <a href="https://github.com/ZackForKey" class="social-link">GitHub</a>
-                        <a href="https://linkedin.com/in/mohammad-zaky-prastio-278399374/" class="social-link">LinkedIn</a>
+                        <a href="https://github.com/ZackForKey" class="social-link" target="_blank">GitHub</a>
+                        <a href="https://linkedin.com/in/mohammad-zaky-prastio-278399374/" class="social-link" target="_blank">LinkedIn</a>
                         <a href="mailto:zakyprastio07@gmail.com" class="social-link">Email</a>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- SECTION BARU: EDUCATION (Sesuai Syarat Individual Assignment 1) -->
+        <section id="education" class="education-section">
+            <div class="container">
+                <h2>Riwayat Pendidikan</h2>
+                <div class="edu-container">
+                    
+                    <!-- Item 1: Universitas Indonesia -->
+                    <div class="edu-card">
+                        <div class="edu-header">
+                            <img src="{% static 'img/ui-logo.png' %}" alt="Logo UI" class="edu-logo">
+                            <div class="edu-title-group">
+                                <h3>Universitas Indonesia (UI)</h3>
+                                <p class="edu-sub">S1 Ilmu Komputer &bull; 2025 - Sekarang</p>
+                            </div>
+                            <details class="edu-dropdown">
+                                <summary class="arrow-btn" title="Lihat detail kegiatan">&#9660;</summary>
+                                <div class="edu-details">
+                                    <ul>
+                                        <li>Aktif mengikuti perkuliahan dan praktikum Pemrograman Berbasis Platform.</li>
+                                        <li>Mendalami struktur data, algoritma, serta arsitektur sistem komputer.</li>
+                                        <li>Aktif berkolaborasi dalam kelompok studi dan proyek pemrograman.</li>
+                                    </ul>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+
+                    <!-- Item 2: SMA Soekarno -->
+                    <div class="edu-card">
+                        <div class="edu-header">
+                            <img src="{% static 'img/sma-logo.png' %}" alt="Logo SMA" class="edu-logo">
+                            <div class="edu-title-group">
+                                <h3>SMA Soekarno</h3>
+                                <p class="edu-sub">MIPA &bull; 2022 - 2025</p>
+                            </div>
+                            <details class="edu-dropdown">
+                                <summary class="arrow-btn" title="Lihat detail kegiatan">&#9660;</summary>
+                                <div class="edu-details">
+                                    <ul>
+                                        <li>Menjabat sebagai Wakil Pradana dalam organisasi kepramukaan sekolah.</li>
+                                        <li>Aktif mengikuti kegiatan kedisiplinan dan upacara nasional.</li>
+                                        <li>Lulus dengan prestasi akademik yang memuaskan di bidang sains.</li>
+                                    </ul>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+        </section>
     </main>
 
+    <!-- FOOTER -->
     <footer class="site-footer">
         <div class="container">
             <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
