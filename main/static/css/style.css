@@ -148,7 +148,7 @@ nav a:hover {
     background-color: var(--card-bg);
 }
 
-/* Education Section (Setengah Bagian Pertama) */
+/* Education Section  */
 .education-section {
     padding: 4rem 0;
     border-top: 1px solid var(--border);
@@ -279,26 +279,9 @@ details[open] .arrow-btn {
     line-height: 1.6;
 }
 
-/* Animasi halus (fade-in &geser ke bawah dikit) ketika detail dibuka */
+/* Animasi  (fade-in &geser ke bawah dikit) ketika detail dibuka */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-4px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Pengaturan Responsif khusus layar kecil / Mobile (lebar max 600px) */
-@media (max-width: 600px) {
-    .edu-header {
-        flex-wrap: wrap; /* Membungkus elemen jika layar tidak cukup */
-    }
-    .edu-title-group {
-        width: calc(100% - 66px);
-    }
-    /* Memindahkan tombol panah ke baris baru di sebelah kanan saat tampilan HP */
-    .edu-dropdown {
-        width: 100%;
-        text-align: right;
-        margin-top: 10px;
-        display: flex;
-        justify-content: flex-end;
-    }
-}
