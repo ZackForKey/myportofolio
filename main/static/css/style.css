@@ -45,9 +45,19 @@ body {
     text-decoration: none;
 }
 
+nav {
+    display: flex;
+    gap: 1.5rem;
+}
+
 nav a {
     color: var(--text-muted);
     text-decoration: none;
+    transition: color 0.2s;
+}
+
+nav a:hover {
+    color: var(--accent);
 }
 
 /* Hero Section */
@@ -136,6 +146,73 @@ nav a {
 
 .social-link:hover {
     background-color: var(--card-bg);
+}
+
+/* Education Section (Setengah Bagian Pertama) */
+.education-section {
+    padding: 4rem 0;
+    border-top: 1px solid var(--border);
+}
+
+.education-section h2 {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    font-size: 2rem;
+    color: var(--text);
+}
+
+.edu-container {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.edu-card {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.edu-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+}
+
+.edu-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+}
+
+.edu-logo {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    flex-shrink: 0;
+}
+
+.edu-title-group {
+    flex-grow: 1;
+}
+
+.edu-title-group h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    color: var(--text);
+}
+
+.edu-sub {
+    margin: 4px 0 0 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
 }
 
 /* Footer */
