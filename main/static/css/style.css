@@ -244,3 +244,61 @@ nav a:hover {
         transition: background-color 0.2s, transform 0.3s ease, border-color 0.2s;
         user-select: none;
 } 
+/* Menyembunyikan panah default bawaan tag */
+.arrow-btn::-webkit-details-marker {
+    display: none;
+}
+
+/* Efek saat tombol disorot mouse  */
+.arrow-btn:hover {
+    background-color: var(--card-bg);
+    border-color: var(--accent);
+}
+
+/* Memutar tombol panah 180 derajat saat dropdown dibuka */
+details[open] .arrow-btn {
+    transform: rotate(180deg);
+    background-color: var(--card-bg);
+    border-color: var(--accent);
+}
+
+/* Styling kontainer kegiatan di dalam dropdown */
+.edu-details {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    animation: fadeIn 0.3s ease-in-out; /* efek animasi muncul */
+}
+
+/* Mengatur jarak dan warna teks list detail riwayat pendidikan */
+.edu-details ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Animasi halus (fade-in &geser ke bawah dikit) ketika detail dibuka */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Pengaturan Responsif khusus layar kecil / Mobile (lebar max 600px) */
+@media (max-width: 600px) {
+    .edu-header {
+        flex-wrap: wrap; /* Membungkus elemen jika layar tidak cukup */
+    }
+    .edu-title-group {
+        width: calc(100% - 66px);
+    }
+    /* Memindahkan tombol panah ke baris baru di sebelah kanan saat tampilan HP */
+    .edu-dropdown {
+        width: 100%;
+        text-align: right;
+        margin-top: 10px;
+        display: flex;
+        justify-content: flex-end;
+    }
+}
