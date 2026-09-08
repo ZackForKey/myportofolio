@@ -15,10 +15,10 @@
     <!-- HEADER / NAVBAR -->
     <header class="site-header">
         <div class="container">
-            <a href="#profile" class="brand">{{ name }}</a>
+            <a href="{% url 'portofolio_main:show_main' %}" class="brand">{{ name }}</a>
             <nav>
-                <a href="#profile">Profile</a>
-                <a href="#education">Education</a>
+                <a href="{% url 'portofolio_main:show_main' %}">Profile</a>
+                <a href="{% url 'portofolio_main:show_experience' %}">Education</a>
             </nav>
         </div>
     </header>
