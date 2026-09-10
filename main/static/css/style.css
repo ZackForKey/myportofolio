@@ -184,7 +184,7 @@ nav a:hover {
 
 .edu-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 1rem;
     position: relative;
 }
@@ -267,6 +267,7 @@ details[open] .arrow-btn {
     margin-top: 1rem;
     padding-top: 1rem;
     border-top: 1px solid var(--border);
+    width: 100;
     animation: fadeIn 0.3s ease-in-out; /* efek animasi muncul */
 }
 
