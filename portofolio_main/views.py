@@ -17,7 +17,7 @@ def show_experience(request):
         id=uuid.uuid4(),
         title="Staff Departemen Olahraga BEM Fasilkom UI",
         description="Aktif berkontribusi sebagai Staff Departemen Olahraga (Depor) BEM Fasilkom UI 2026. Menjadi Penanggung Jawab / Pemegang Unit Kegiatan Olahraga (UKOR) Voli serta terlibat langsung dalam perencanaan dan pelaksanaan program kerja Olimpiade Universitas Indonesia (Olim UI).",
-        category="volunteer",
+        category="full-time",
         thumbnail="",
         started_at=timezone.now(),
         ended_at=None  
@@ -27,7 +27,7 @@ def show_experience(request):
         id=uuid.uuid4(),
         title="Koordinator Lapangan - Laskar Biru Merah (LBM)",
         description="Bergabung dalam Laskar Biru Merah (LBM), kelompok suporter Fasilkom UI yang memberikan semangat kepada kontingen CSUI dalam berbagai ajang kompetisi antar fakultas. Bertanggung jawab sebagai Koordinator Lapangan yang mengatur jalannya kegiatan suporteran, koordinasi massa, serta akomodasi dan peralatan.",
-        category="volunteer",
+        category="full-time",
         thumbnail="",
         started_at=timezone.now(),
         ended_at=None
