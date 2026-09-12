@@ -17,8 +17,8 @@
         <div class="container">
             <a href="{% url 'portofolio_main:show_main' %}" class="brand">{{ name }}</a>
             <nav>
-                <a href="#profile">Profile</a>
-                <a href="#experience">Experience</a>
+                <a href="{% url 'portofolio_main:show_main' %}">Profile</a>
+                <a href="{% url 'portofolio_main:show_experience' %}">Experience</a>
             </nav>
         </div>
     </header>
@@ -104,50 +104,6 @@
                         </div>
                     </div>
 
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION EXPERIENCE -->
-        <section class="experience-section" id="experience">
-            <div class="container">
-                <p class="section-kicker">PERJALANAN & PENGALAMAN</p>
-                <h2 class="section-title">Organizational Experience</h2>
-                
-                <div class="exp-container">
-                    <!-- Item 1: Pengalaman Organisasi -->
-                    <details class="exp-card">
-                        <summary class="exp-header">
-                            <div class="exp-title-group">
-                                <h3>Staff Departemen Olahraga BEM Fasilkom UI</h3>
-                                <p class="exp-sub">Organization &bull; Universitas Indonesia</p>
-                            </div>
-                            <span class="exp-arrow">&#9660;</span>
-                        </summary>
-                        <div class="exp-details">
-                            <ul>
-                                <li>Aktif berkontribusi sebagai Staff Departemen Olahraga (Depor) BEM Fasilkom UI 2026.</li>
-                                <li>Menjadi Penanggung Jawab / Pemegang Unit Kegiatan Olahraga (UKOR) Voli serta terlibat langsung dalam perencanaan dan pelaksanaan program kerja Olimpiade Universitas Indonesia (Olim UI).</li>
-                            </ul>
-                        </div>
-                    </details>
-
-                    <!-- Item 2: Pengalaman Kerja -->
-                    <details class="exp-card">
-                        <summary class="exp-header">
-                            <div class="exp-title-group">
-                                <h3>Koordinator Lapangan - Laskar Biru Merah (LBM)</h3>
-                                <p class="exp-sub">Organization &bull; Universitas Indonesia</p>
-                            </div>
-                            <span class="exp-arrow">&#9660;</span>
-                        </summary>
-                        <div class="exp-details">
-                            <ul>
-                                <li>Bergabung dalam Laskar Biru Merah (LBM), kelompok suporter Fasilkom UI yang memberikan semangat kepada kontingen CSUI dalam berbagai ajang kompetisi antar fakultas. </li>
-                                <li>Bertanggung jawab sebagai Koordinator Lapangan yang mengatur jalannya kegiatan suporteran, koordinasi massa, serta akomodasi dan peralatan yang dibutuhkan selama acara berlangsung.</li>
-                            </ul>
-                        </div>
-                    </details>
                 </div>
             </div>
         </section>
