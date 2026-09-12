@@ -11,8 +11,11 @@ def show_main(request):
     return render(request, "main.html", context)
 
 def show_experience(request):
+    data_exp = Experience.objects.all()
+    print("DATA DARI DATABASE:", data_exp) 
+    
     context = {
         "name": "Mohammad Zaky Prastio",
-        "experience_list": Experience.objects.all(),
+        "experience_list": data_exp,
     }
     return render(request, "experience.html", context)
