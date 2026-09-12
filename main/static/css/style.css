@@ -15,8 +15,9 @@
 
 body {
     font-family: 'Space Grotesk', sans-serif;
-    background-color: var(--bg) !important;
+    background: var(--bg)!important;
     background-attachment: fixed;
+    min-height: 100vh;
     color: var(--text);
     line-height: 1.6;
 }
@@ -197,7 +198,7 @@ nav a:hover {
     object-fit: cover;
     border-radius: 50%;
     border: 1px solid var(--border);
-    background: var(--bg);
+    background: #09090b;
     flex-shrink: 0;
 }
 
@@ -239,7 +240,7 @@ nav a:hover {
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: var(--bg);
+        background-color: #18181b;
         color: var(--text);
         border: 1px solid var(--border);
         border-radius: 50%; /* tombol lingkaran */
