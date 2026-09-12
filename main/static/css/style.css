@@ -1,10 +1,10 @@
 :root {
     --bg: linear-gradient(135deg, #09090b 0%, #18181b 50%, #27272a 100%);
-    --card-bg: rgba(255,255,255,0.03);
+    --card-bg: rgba(255, 255, 255, 0.03);
     --text: #ffffff;
     --text-muted: #a1a1aa;
     --accent: #e4e4e7;
-    --border: rgba(255,255,255,0.1);
+    --border: rgba(255, 255, 255, 0.1);
 }
 
 * {
@@ -15,7 +15,7 @@
 
 body {
     font-family: 'Space Grotesk', sans-serif;
-    background: var(--bg)!important;
+    background: var(--bg) !important;
     background-attachment: fixed;
     min-height: 100vh;
     color: var(--text);
@@ -150,7 +150,7 @@ nav a:hover {
     background-color: var(--card-bg);
 }
 
-/* Education Section  */
+/* Education Section */
 .education-section {
     padding: 4rem 0;
     border-top: 1px solid var(--border);
@@ -218,63 +218,51 @@ nav a:hover {
     color: var(--text-muted);
 }
 
-/* Footer */
-.site-footer {
-    border-top: 1px solid var(--border);
-    padding: 2rem 0;
-    margin-top: 4rem;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    text-align: center;
-}
-    /* Drop down Section */
-.edu-dropdown{
+/* Dropdown Education */
+.edu-dropdown {
     margin-left: auto;
 }
-.arrow-btn{
-        list-style-type: none; /* Menghilangkan tanda bawaan browser */
-        cursor: pointer;
-        font-size: 0.8rem;
-        width: 36px;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #18181b;
-        color: var(--text);
-        border: 1px solid var(--border);
-        border-radius: 50%; /* tombol lingkaran */
-        transition: background-color 0.2s, transform 0.3s ease, border-color 0.2s;
-        user-select: none;
+
+.arrow-btn {
+    list-style-type: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #18181b;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    transition: background-color 0.2s, transform 0.3s ease, border-color 0.2s;
+    user-select: none;
 } 
-/* Menyembunyikan panah default bawaan tag */
+
 .arrow-btn::-webkit-details-marker {
     display: none;
 }
 
-/* Efek saat tombol disorot mouse  */
 .arrow-btn:hover {
     background-color: var(--card-bg);
     border-color: var(--accent);
 }
 
-/* Memutar tombol panah 180 derajat saat dropdown dibuka */
 details[open] .arrow-btn {
     transform: rotate(180deg);
     background-color: var(--card-bg);
     border-color: var(--accent);
 }
 
-/* Styling kontainer kegiatan di dalam dropdown */
 .edu-details {
     margin-top: 1rem;
     padding-top: 1rem;
     border-top: 1px solid var(--border);
-    width: 100;
-    animation: fadeIn 0.3s ease-in-out; /* efek animasi muncul */
+    width: 100%;
+    animation: fadeIn 0.3s ease-in-out;
 }
 
-/* Mengatur jarak dan warna teks list detail riwayat pendidikan */
 .edu-details ul {
     margin: 0;
     padding-left: 1.2rem;
@@ -283,13 +271,11 @@ details[open] .arrow-btn {
     line-height: 1.6;
 }
 
-/* Animasi  (fade-in &geser ke bawah dikit) ketika detail dibuka */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-4px); }
-    to { opacity: 1; transform: translateY(0); }
+/* Experience Section */
+.experience-section {
+    padding: 4rem 0;
 }
 
-/* Container Pengalaman */
 .exp-container {
     display: flex;
     flex-direction: column;
@@ -298,20 +284,22 @@ details[open] .arrow-btn {
     margin: 0 auto;
 }
 
-/* Card dengan Efek Kaca / Glassmorphism Dark */
+/* Card Obsidian Dark */
 .exp-card {
-    background-color: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(24, 24, 27, 0.65);
+    border: 1px solid var(--border);
     border-radius: 10px;
     padding: 1.25rem 1.5rem;
+    backdrop-filter: blur(12px);
     transition: all 0.3s ease;
 }
 
 .exp-card:hover {
-    border-color: rgba(255, 255, 255, 0.25);
+    background-color: rgba(39, 39, 42, 0.8);
+    border-color: var(--accent);
+    transform: translateY(-2px);
 }
 
-/* Header Summary */
 .exp-header {
     display: flex;
     justify-content: space-between;
@@ -338,20 +326,17 @@ details[open] .arrow-btn {
     margin: 0;
 }
 
-/* Panah Bawaan (Biru Segitiga) */
 .exp-arrow {
     color: #38bdf8;
     font-size: 0.65rem;
     transition: transform 0.3s ease, color 0.3s ease;
 }
 
-/* Saat Dropdown Terbuka: Panah Memutar & Berubah Merah */
 details[open] .exp-arrow {
     transform: rotate(180deg);
     color: #f43f5e;
 }
 
-/* Isi Deskripsi di Dalam Dropdown */
 .exp-details {
     margin-top: 1rem;
     padding-top: 1rem;
@@ -366,11 +351,7 @@ details[open] .exp-arrow {
     margin: 0;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-4px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-/* Styling Kicker & Judul Experience dengan Garis Gradasi */
+/* Kicker & Judul Experience */
 .section-kicker {
     color: #38bdf8;
     font-size: 0.8rem;
@@ -390,7 +371,6 @@ details[open] .exp-arrow {
     padding-bottom: 0.5rem;
 }
 
-/* Garis Aksen Gradasi Biru ke Merah di Bawah Judul */
 .section-title::after {
     content: '';
     position: absolute;
@@ -400,4 +380,19 @@ details[open] .exp-arrow {
     height: 3px;
     background: linear-gradient(90deg, #38bdf8 0%, #f43f5e 100%);
     border-radius: 2px;
+}
+
+/* Footer */
+.site-footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 0;
+    margin-top: 4rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
 }
