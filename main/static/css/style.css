@@ -370,4 +370,34 @@ details[open] .exp-arrow {
     from { opacity: 0; transform: translateY(-4px); }
     to { opacity: 1; transform: translateY(0); }
 }
+/* Styling Kicker & Judul Experience dengan Garis Gradasi */
+.section-kicker {
+    color: #38bdf8;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.4rem;
+}
 
+.section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 2rem;
+    display: inline-block;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+/* Garis Aksen Gradasi Biru ke Merah di Bawah Judul */
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #38bdf8 0%, #f43f5e 100%);
+    border-radius: 2px;
+}
