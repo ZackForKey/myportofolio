@@ -1,6 +1,7 @@
 import uuid
 from django.utils import timezone
 from django.shortcuts import render
+from django.http import HttpResponse
 from portofolio_main.models import Experience
 
 def show_main(request):
@@ -13,28 +14,28 @@ def show_main(request):
     return render(request, "main.html", context)
 
 def show_experience(request):
-    exp1 = Experience(
-        id=uuid.uuid4(),
-        title="Staff Departemen Olahraga BEM Fasilkom UI",
-        description="Aktif berkontribusi sebagai Staff Departemen Olahraga (Depor) BEM Fasilkom UI 2026. Menjadi Penanggung Jawab / Pemegang Unit Kegiatan Olahraga (UKOR) Voli serta terlibat langsung dalam perencanaan dan pelaksanaan program kerja Olimpiade Universitas Indonesia (Olim UI).",
-        category="full-time",
-        thumbnail="",
-        started_at=timezone.now(),
-        ended_at=None  
-    )
-    
-    exp2 = Experience(
-        id=uuid.uuid4(),
-        title="Koordinator Lapangan - Laskar Biru Merah (LBM)",
-        description="Bergabung dalam Laskar Biru Merah (LBM), kelompok suporter Fasilkom UI yang memberikan semangat kepada kontingen CSUI dalam berbagai ajang kompetisi antar fakultas. Bertanggung jawab sebagai Koordinator Lapangan yang mengatur jalannya kegiatan suporteran, koordinasi massa, serta akomodasi dan peralatan.",
-        category="full-time",
-        thumbnail="",
-        started_at=timezone.now(),
-        ended_at=None
-    )
-
     context = {
         "name": "Mohammad Zaky Prastio",
-        "experience_list": [exp1, exp2],
+        "experience_list": Experience.objects.all(),
     }
     return render(request, "experience.html", context)
+def suntik_data(request): 
+    Experience.objects.create(
+                id=uuid.uuid4(),
+                title="Staff Departemen Olahraga BEM Fasilkom UI",
+                description="Aktif berkontribusi sebagai Staff Departemen Olahraga (Depor) BEM Fasilkom UI 2026. Menjadi Penanggung Jawab / Pemegang Unit Kegiatan Olahraga (UKOR) Voli serta terlibat langsung dalam perencanaan dan pelaksanaan program kerja Olimpiade Universitas Indonesia (Olim UI).",
+                category="full-time",
+                thumbnail="",
+                started_at=timezone.now(),
+                ended_at=None 
+                )
+    Experience.objects.create(
+                id=uuid.uuid4(),
+                title="Koordinator Lapangan - Laskar Biru Merah (LBM)",
+                description="Bergabung dalam Laskar Biru Merah (LBM), kelompok suporter Fasilkom UI yang memberikan semangat kepada kontingen CSUI dalam berbagai ajang kompetisi antar fakultas. Bertanggung jawab sebagai Koordinator Lapangan yang mengatur jalannya kegiatan suporteran, koordinasi massa, serta akomodasi dan peralatan.",
+                category="full-time",
+                thumbnail="",
+                started_at=timezone.now(),
+                ended_at=None
+                )
+    return HttpResponse("Mantap! Data pengalaman berhasil disuntik ke database. Silakan buka halaman /experience/")
