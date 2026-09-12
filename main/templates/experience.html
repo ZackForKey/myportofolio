@@ -30,33 +30,31 @@
                 <h1 class="section-title">Organizational Experience</h1>
                 
                 <div class="exp-container">
-                    <!-- Item 1: BEM Fasilkom UI -->
-                    <details class="exp-card">
-                        <summary class="exp-header">
-                            <div class="exp-title-group">
-                                <h3>Staff Departemen Olahraga BEM Fasilkom UI</h3>
-                                <p class="exp-sub">Organization &bull; Sedang berlangsung</p>
+                    {% for experience in experience_list %}
+                        <details class="exp-card">
+                            <summary class="exp-header">
+                                <div class="exp-title-group">
+                                    <h3>{{ experience.title }}</h3>
+                                    <p class="exp-sub">
+                                        {{ experience.get_category_display }} &bull; 
+                                        {% if experience.is_ongoing %}
+                                            Sedang berlangsung
+                                        {% else %}
+                                            Selesai
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                <span class="exp-arrow">&#9660;</span>
+                            </summary>
+                            <div class="exp-details">
+                                <p>{{ experience.description }}</p>
                             </div>
-                            <span class="exp-arrow">&#9660;</span>
-                        </summary>
-                        <div class="exp-details">
-                            <p>Aktif berkontribusi sebagai Staff Departemen Olahraga (Depor) BEM Fasilkom UI 2026. Menjadi Penanggung Jawab / Pemegang Unit Kegiatan Olahraga (UKOR) Voli serta terlibat langsung dalam perencanaan dan pelaksanaan program kerja Olimpiade Universitas Indonesia (Olim UI).</p>
-                        </div>
-                    </details>
-
-                    <!-- Item 2: LBM Fasilkom UI -->
-                    <details class="exp-card">
-                        <summary class="exp-header">
-                            <div class="exp-title-group">
-                                <h3>Koordinator Lapangan - Laskar Biru Merah (LBM)</h3>
-                                <p class="exp-sub">Organization &bull; Sedang berlangsung</p>
-                            </div>
-                            <span class="exp-arrow">&#9660;</span>
-                        </summary>
-                        <div class="exp-details">
-                            <p>Bergabung dalam Laskar Biru Merah (LBM), kelompok suporter Fasilkom UI yang memberikan semangat kepada kontingen CSUI dalam berbagai ajang kompetisi antar fakultas. Bertanggung jawab sebagai Koordinator Lapangan yang mengatur jalannya kegiatan suporteran, koordinasi massa, serta akomodasi dan peralatan yang dibutuhkan selama acara berlangsung.</p>
-                        </div>
-                    </details>
+                        </details>
+                    {% empty %}
+                        <p class="empty-state">
+                            Belum ada pengalaman yang ditambahkan.
+                        </p>
+                    {% endfor %}
                 </div>
             </div>
         </section>
