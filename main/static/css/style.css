@@ -1,7 +1,7 @@
 :root {
     --bg: linear-gradient(135deg, #09090b 0%, #18181b 50%, #27272a 100%);
     --card-bg: rgba(255,255,255,0.03);
-    --text: #f4f4f5;
+    --text: #ffffff;
     --text-muted: #a1a1aa;
     --accent: #e4e4e7;
     --border: rgba(255,255,255,0.1);
@@ -15,7 +15,7 @@
 
 body {
     font-family: 'Space Grotesk', sans-serif;
-    background-color: var(--bg);
+    background-color: var(--bg) !important;
     background-attachment: fixed;
     color: var(--text);
     line-height: 1.6;
