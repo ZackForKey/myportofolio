@@ -1,10 +1,10 @@
 :root {
-    --bg: #121212;
-    --card-bg: #1e1e1e;
-    --text: #e0e0e0;
-    --text-muted: #a0a0a0;
-    --accent: #646cff;
-    --border: #2d2d2d;
+    --bg: linear-gradient(135deg, #09090b 0%, #18181b 50%, #27272a 100%);
+    --card-bg: rgba(255,255,255,0.03);
+    --text: #f4f4f5;
+    --text-muted: #a1a1aa;
+    --accent: #e4e4e7;
+    --border: rgba(255,255,255,0.1);
 }
 
 * {
@@ -16,6 +16,7 @@
 body {
     font-family: 'Space Grotesk', sans-serif;
     background-color: var(--bg);
+    background-attachment: fixed;
     color: var(--text);
     line-height: 1.6;
 }
@@ -174,6 +175,7 @@ nav a:hover {
     border-radius: 10px;
     padding: 1.5rem;
     border: 1px solid var(--border);
+    backdrop-filter: blur(8px);
     transition: transform 0.3s ease, border-color 0.3s ease;
 }
 

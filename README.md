@@ -5,7 +5,7 @@ deployyyy
 2 september 2026 Sudah berhasi deploy
 3 september 2026 Masukin Database Done.
 4 dan 5 spt adding html and css
-### Tugas 1
+
 ### Tugas 1
 
 1. Ya, saya menggunakan elemen semantik HTML5 seperti <section> untuk memisahkan bagian utama halaman serta <header> dan <footer> di dalam web. Penggunaan elemen ini membantu membuat kode HTML jauh lebih terstruktur. Selain itu, elemen semantik mempermudah proses styling CSS dan membantu screen reader memahami konteks bagian halaman dengan lebih akurat.
@@ -16,3 +16,42 @@ deployyyy
 
 **AI Disclosure:**
 Dalam pengerjaan tugas ini, saya menggunakan bantuan AI sebagai rekan diskusi dan sparring partner untuk merumuskan struktur kode CSS khusus section pendidikan, merapikan tata letak flexbox, serta membantu menyusun kalimat refleksi agar lebih terstruktur. Seluruh implementasi kode akhir, penyesuaian desain, dan integrasi ke repositori tetap saya lakukan dan uji secara mandiri.
+
+### Tugas 2
+1. **Alur Permintaan (Request-Response Cycle) Django MVT:**
+   * **`urls.py` Proyek:** Menerima *HTTP request* pertama kali dari pengguna/browser. File ini bertindak sebagai (*router*) yang mengarahkan jalur URL tertentu ke `urls.py` milik aplikasi terkait menggunakan fungsi `include()`.
+   * **`urls.py` Aplikasi:** Memetakan URL spesifik aplikasi ke fungsi atau kelas *view* tertentu yang bertanggung jawab menangani permintaan tersebut.
+   * **View (`views.py`):** Bertindak sebagai otak. View menerima permintaan, lalu meminta/mengambil data yang dibutuhkan dari **Model**.
+   * **Model (`models.py`):** Mewakili struktur data dan berinteraksi langsung dengan database melalui Django ORM untuk mengambil, menyimpan, atau memperbarui data (misalnya data proyek portofolio). Data ini kemudian dikembalikan ke *view*.
+   * **Template (`.html`):** *View* mengirimkan data dari *Model* ke *Template*. *Template* menggabungkan struktur HTML dengan data tersebut menggunakan Django Template Language (DTL), lalu mengompilasinya menjadi tampilan HTML utuh.
+   * **Tampilan Browser:** *View* mengirimkan hasil *render* HTML tersebut sebagai *HTTP Response* kembali ke browser pengguna untuk ditampilkan.
+
+2. **Alasan Menyimpan Data di Model dibanding Hardcode di Template:**
+   * **Pemisahan Tanggung Jawab (*Separation of Concerns*):** *Template* hanya berfokus pada UI/UX, sedangkan data dan logika dikelola terpisah di database (*Model*).
+   * **Kemudahan Pemeliharaan (*Maintainability*):** Jika ada perubahan data portofolio (misalnya menambah item baru atau mengubah deskripsi), perubahan cukup dilakukan melalui database/Django Admin tanpa perlu menyentuh atau merubah kode HTML di *template*.
+   * **Skalabilitas dan Efisiensi:** Data di *Model* dapat ditampilkan secara dinamis menggunakan *looping* (`{% for %}`) di *template*. Jika ditulis langsung di *template*, kode HTML akan menjadi sangat panjang, repetitif, dan sulit dikelola seiring bertambahnya isi portofolio.
+   * **Pengolahan Data:** Data yang tersimpan di *Model* dapat dengan mudah difilter, diurutkan, dicari, atau diekspor ke format lain (seperti API JSON) di kemudian hari.
+
+3. **Perbedaan `makemigrations` dan `migrate` serta Contohnya:**
+   * **`makemigrations`:** Perintah untuk mendeteksi perubahan yang terjadi pada skema model di file `models.py`, lalu membuatkan file racikan/cetak biru (*blueprint*) migrasi di dalam folder `migrations/`. Perintah ini belum menerapkan perubahan ke database.
+   * **`migrate`:** Perintah untuk mengeksekusi file cetak biru migrasi yang telah dibuat oleh `makemigrations` dan menerapkannya secara nyata ke tabel-tabel di dalam database.
+   
+   **Contoh Perubahan Model:**  
+   Misalnya kita menambahkan *field* baru `description` pada model `Portfolio` di `models.py`:
+   ```python
+   # main/models.py
+   from django.db import models
+
+   class Portfolio(models.Model):
+       title = models.CharField(max_length=100)
+       # Perubahan baru: menambahkan field description
+       description = models.TextField()
+
+### AI Disclosure & Declaration
+
+Dalam proses pengerjaan proyek web portofolio ini, saya menggunakan AI Gemini sebagai sarana pembelajaran dan asisten pengembangan. 
+
+Bantuan AI pemanfaatannya mencakup:
+* **Perintah Terminal & Lingkungan Kerja:** Membantu verifikasi *command line* (seperti perintah manajemen Django, perintah Git, dan pemecahan masalah *environment*).
+* **Pemecahan Masalah (Debugging):** Membantu melacak *error* pada kode dan memberikan panduan perbaikan *syntax*.
+* **Pemahaman Konsep & Arsitektur:** Membantu memahami alur kerja MVT Django serta penyusunan logika dasar aplikasi.
