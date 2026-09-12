@@ -1,3 +1,4 @@
 from django.contrib import admin
+from .models import Experience  # Sesuaikan nama model jika berbeda (misal: PortfolioExperience)
 
-# Register your models here.
+admin.site.register(Experience)
