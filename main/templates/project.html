@@ -27,22 +27,25 @@
                     <button type="submit" class="button">Cari</button>
                 </form>
 
-                <div class="experience-grid project-grid">
+                <div class="project-grid">
                     {% for project in project_list %}
-                        <article class="experience-card">
+                        <!-- CLASS NYA UDAH GW GANTI JADI project-card BIAR NYAMBUNG SAMA CSS -->
+                        <article class="project-card">
                             {% if project.project_image_url %}
                                 <img src="{{ project.project_image_url }}"
                                      alt="Gambar {{ project.title }}"
                                      class="project-image">
                             {% endif %}
+                            
                             <h2>{{ project.title }}</h2>
-                            <span class="experience-category">{{ project.tech_stack }}</span>
-                            <p class="experience-description">{{ project.description }}</p>
+                            <span class="project-category">{{ project.tech_stack }}</span>
+                            <p class="project-description">{{ project.description }}</p>
                             
                             <div class="project-card-actions">
                                 <div class="project-actions">
                                     {% if project.project_url %}
-                                        <a href="{{ project.project_url }}" class="button" target="_blank">Lihat Project</a>
+                                        <!-- CLASS TOMBOL DITAMBAHIN button-white -->
+                                        <a href="{{ project.project_url }}" class="button button-white" target="_blank">Lihat Project</a>
                                     {% endif %}
                                     <!-- Menyisipkan modal delete -->
                                     {% include "components/project_delete_modal.html" with project=project %}

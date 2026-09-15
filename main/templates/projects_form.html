@@ -7,22 +7,34 @@
 {% block content %}
 <main>
     <section class="experience-section">
-        <div class="container" style="max-width: 600px;">
+        <div class="container" style="max-width: 700px;">
             <p class="section-kicker">Formulir Portofolio</p>
             <h1 class="section-title" style="margin-bottom: 2rem;">Tambah Proyek Baru</h1>
 
-            <form method="POST" class="edu-card" style="display: flex; flex-direction: column; gap: 1.25rem; padding: 2rem;">
+            <form method="POST" class="edu-card project-form-card">
                 {% csrf_token %}
                 
-                {{ form.as_p }}
+                {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        <div class="input-wrapper">
+                            {{ field }}
+                        </div>
+                        {% if field.errors %}
+                            <span class="form-error">{{ field.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
 
-                <button type="submit" class="button" style="background-color: #2563eb; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 1rem; width: 100%;">
+                <button type="submit" class="button project-submit-btn">
                     Tambah Project
                 </button>
             </form>
 
             <div style="margin-top: 1.5rem; text-align: center;">
-                <a href="{% url 'portofolio_main:show_projects' %}" style="color: var(--text-muted); text-decoration: none;">&larr; Kembali ke Daftar Proyek</a>
+                <a href="{% url 'portofolio_main:show_projects' %}" style="color: var(--text-muted); text-decoration: none; font-size: 0.95rem;">
+                    &larr; Kembali ke Daftar Proyek
+                </a>
             </div>
         </div>
     </section>
