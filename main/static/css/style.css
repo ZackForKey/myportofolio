@@ -392,6 +392,148 @@ details[open] .exp-arrow {
     text-align: center;
 }
 
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.project-add-button {
+    background-color: #2563eb;
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.project-add-button:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+/* Perbaikan Form Pencarian agar Sejajar Rapi */
+.project-search {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+    max-width: 600px;
+    width: 100%;
+}
+
+.project-search__input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    background-color: #1e293b;
+    color: #f8fafc;
+    font-size: 1rem;
+    outline: none;
+    height: 48px;
+    transition: border-color 0.2s ease;
+}
+
+.project-search__input:focus {
+    border-color: #3b82f6;
+}
+
+.project-search button.button {
+    padding: 0 1.5rem;
+    height: 48px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.project-search button.button:hover {
+    background-color: #2563eb;
+}
+
+/* Grid & Kartu Proyek */
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+.project-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.project-card-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.project-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #94a3b8;
+    font-style: italic;
+    padding: 3rem 0;
+}
+
+/* Styling Tombol Hapus & Popover Modal */
+.button-delete {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.button-delete:hover {
+    background-color: #dc2626;
+}
+
+/* Popover Native */
+[popover] {
+    background: #1e293b;
+    color: #f8fafc;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 400px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+[popover]::backdrop {
+    background: rgba(0, 0, 0, 0.6);
+}
+
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-4px); }
     to { opacity: 1; transform: translateY(0); }

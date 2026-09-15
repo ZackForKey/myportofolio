@@ -1,0 +1,29 @@
+<!-- Tombol untuk memicu modal hapus -->
+<button type="button" class="button-delete" popovertarget="delete-modal-{{ project.id }}">
+    Hapus
+</button>
+
+<!-- Elemen Popover Modal Hapus -->
+<div id="delete-modal-{{ project.id }}" popover style="margin: auto;">
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <h3 style="color: #f8fafc; font-size: 1.25rem; font-weight: 700;">Konfirmasi Hapus</h3>
+        <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.5;">
+            Apakah kamu yakin ingin menghapus proyek <strong>"{{ project.title }}"</strong>? Tindakan ini tidak dapat dibatalkan.
+        </p>
+        
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 0.5rem;">
+            <!-- Tombol Batal untuk menutup popover -->
+            <button type="button" class="button" popovertarget="delete-modal-{{ project.id }}" popovertargetaction="hide" style="background-color: #334155; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">
+                Batal
+            </button>
+            
+            <!-- Form untuk mengeksekusi hapus ke backend -->
+            <form action="{% url 'portofolio_main:delete_project' project.id %}" method="POST" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="button-delete" style="padding: 0.5rem 1rem;">
+                    Ya, Hapus
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

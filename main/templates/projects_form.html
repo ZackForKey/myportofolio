@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block meta %}
+    <title>Tambah Proyek - {{ name }}</title>
+{% endblock meta %}
+
+{% block content %}
+<main>
+    <section class="experience-section">
+        <div class="container" style="max-width: 600px;">
+            <p class="section-kicker">Formulir Portofolio</p>
+            <h1 class="section-title" style="margin-bottom: 2rem;">Tambah Proyek Baru</h1>
+
+            <form method="POST" class="edu-card" style="display: flex; flex-direction: column; gap: 1.25rem; padding: 2rem;">
+                {% csrf_token %}
+                
+                {{ form.as_p }}
+
+                <button type="submit" class="button" style="background-color: #2563eb; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 1rem; width: 100%;">
+                    Tambah Project
+                </button>
+            </form>
+
+            <div style="margin-top: 1.5rem; text-align: center;">
+                <a href="{% url 'portofolio_main:show_projects' %}" style="color: var(--text-muted); text-decoration: none;">&larr; Kembali ke Daftar Proyek</a>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock content %}
