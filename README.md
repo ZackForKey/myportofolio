@@ -55,3 +55,14 @@ Bantuan AI pemanfaatannya mencakup:
 * **Perintah Terminal & Lingkungan Kerja:** Membantu verifikasi *command line* (seperti perintah manajemen Django, perintah Git, dan pemecahan masalah *environment*).
 * **Pemecahan Masalah (Debugging):** Membantu melacak *error* pada kode dan memberikan panduan perbaikan *syntax*.
 * **Pemahaman Konsep & Arsitektur:** Membantu memahami alur kerja MVT Django serta penyusunan logika dasar aplikasi.
+
+### Tugas 3
+
+1. Kita menggunakan ModelForm pada Django alih-alih membuat form HTML secara manual karena ModelForm dapat menghasilkan elemen form secara otomatis langsung dari model database yang sudah ada, serta mempermudah validasi data dan proses penyimpanan ke database. Selain itu, kita wajib menambahkan `{% csrf_token %}` pada form untuk mencegah serangan Cross-Site Request Forgery (CSRF) dengan memastikan request POST yang masuk benar-benar berasal dari pengguna yang sah.
+
+2. JSON lebih disukai dalam pengembangan web modern dibandingkan XML karena formatnya jauh lebih ringan, ringkas, dan tidak memiliki tag pembuka serta penutup yang panjang. Karena berbasis struktur objek JavaScript (key-value), data JSON dapat langsung di-parsing oleh browser dan bahasa pemrograman modern dengan sangat cepat serta efisien untuk komunikasi API.
+
+3. Alur saat view mengembalikan data dalam bentuk JSON dimulai dari client yang melakukan request ke endpoint URL, lalu Django memanggil fungsi view yang melakukan query database untuk mengambil objek model. Objek tersebut kemudian melalui proses serialization untuk diubah ke format string JSON sebelum dikembalikan sebagai HttpResponse dengan content-type application/json. Serialization diperlukan karena objek model Django berupa objek Python kompleks yang terikat database dan tidak bisa dikirim secara mentah melalui protokol HTTP.
+
+**AI Disclosure:**
+Dalam pengerjaan tugas ini, saya menggunakan bantuan AI dengan pendekatan vibe coding untuk membantu menyusun logika CRUD entitas Experience, mengatasi error namespace URL, menyusun styling CSS Obsidian, serta merapikan format jawaban reflektif Tugas 3 agar selaras dengan tugas sebelumnya. Seluruh pengujian dan penerapan akhir dilakukan secara mandiri.
