@@ -33,7 +33,7 @@ def create_experience(request):
     if request.method == "POST" and form.is_valid():
         form.save()
         messages.success(request, "Pengalaman baru berhasil ditambahkan!")
-        return redirect("portofolio_main:show_experience")
+        return redirect("main:show_experience")
 
     context = {
         "name": "Mohammad Zaky Prastio",
@@ -77,7 +77,7 @@ def create_project(request):
     if request.method == "POST" and form.is_valid():
         form.save()
         messages.success(request, "Proyek baru berhasil ditambahkan!")
-        return redirect("portofolio_main:show_projects")
+        return redirect("main:show_projects")
 
     context = {
         "name": "Mohammad Zaky Prastio",
@@ -116,5 +116,5 @@ def delete_project(request, project_id):
     if request.method == "POST":
         project.delete()
         messages.success(request, "Project berhasil dihapus!")
-        return redirect("portofolio_main:show_projects")
-    return redirect("portofolio_main:show_projects")
+        return redirect("main:show_projects")
+    return redirect("main:show_projects")
