@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Tambah Pengalaman - {{ name }}</title>
+{% endblock meta %}
+
+{% block content %}
+<main class="container" style="padding: 4rem 0; min-height: 80vh;">
+    <p class="section-kicker">MANAJEMEN DATA</p>
+    <h1 class="section-title">Tambah Pengalaman Baru</h1>
+    
+    <div class="form-container">
+        <form method="POST">
+            {% csrf_token %}
+            
+            {{ form.as_p }}
+            
+            <div class="form-actions">
+                <button type="submit">Simpan Data</button>
+                <a href="{% url 'main:show_experience' %}" class="btn-batal">Batal</a>
+            </div>
+        </form>
+    </div>
+</main>
+{% endblock content %}

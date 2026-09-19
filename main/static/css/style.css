@@ -534,10 +534,10 @@ details[open] .exp-arrow {
     background: rgba(0, 0, 0, 0.6);
 }
 
-/* --- KARTU PROYEK (DI-UPDATE BIAR ADA LIS NYA) --- */
+/* --- KARTU PROYEK --- */
 .project-card {
     background-color: rgba(24, 24, 27, 0.65);
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Lis pinggir biar kelihatan tegas */
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 12px;
     padding: 1.5rem;
     backdrop-filter: blur(12px);
@@ -580,19 +580,9 @@ details[open] .exp-arrow {
     margin-bottom: 1.5rem;
 }
 
-.project-image {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 1.25rem;
-    border: 1px solid var(--border);
-}
-
-/* --- TOMBOL LIHAT PROJECT (JADI KOTAK PUTIH KEKINIAN) --- */
 .project-card .button {
     background-color: #ffffff;
-    color: #09090b; /* Teks gelap biar kontras */
+    color: #09090b;
     padding: 0.5rem 1.25rem;
     border-radius: 6px;
     text-decoration: none;
@@ -606,34 +596,44 @@ details[open] .exp-arrow {
 }
 
 .project-card .button:hover {
-    background-color: #e4e4e7; /* Abu-abu terang pas di-hover */
+    background-color: #e4e4e7;
     transform: translateY(-2px);
 }
 
-/* --- Styling Form Tambah Proyek ala Arka --- */
-.form-group {
+/* --- STYLING FORM OBSIDIAN (TUGAS 3) --- */
+.form-container {
+    max-width: 600px;
+    background-color: rgba(24, 24, 27, 0.65);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+.form-container p {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    width: 100%;
+    margin-bottom: 1.25rem;
 }
 
-.form-label {
+.form-container label {
     font-weight: 600;
-    color: var(--text);
+    color: #e4e4e7;
     font-size: 0.95rem;
-    display: block;
 }
 
 form input[type="text"],
 form input[type="url"],
+form input[type="date"],
 form textarea {
     display: block !important;
     width: 100% !important;
     padding: 0.85rem 1.25rem !important;
-    border-radius: 9999px !important; /* Bentuk kapsul melengkung */
-    border: 1px solid var(--border) !important; /* Border obsidian elegan */
-    background-color: rgba(24, 24, 27, 0.65) !important;
+    border-radius: 9999px !important;
+    border: 1px solid var(--border) !important;
+    background-color: rgba(9, 9, 11, 0.8) !important;
     color: #f8fafc !important;
     font-size: 1rem !important;
     font-family: 'Space Grotesk', sans-serif !important;
@@ -642,37 +642,74 @@ form textarea {
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Khusus textarea biar sudutnya agak kotak tapi tetap mulus */
 form textarea {
     border-radius: 20px !important;
     min-height: 130px !important;
     resize: vertical !important;
 }
 
-form input:focus,
-form textarea:focus {
-    border-color: var(--text-muted) !important; /* Fokus abu-abu terang */
-    box-shadow: 0 0 0 2px rgba(161, 161, 170, 0.2) !important;
+/* Perbaikan input tanggal agar teks/placeholder-nya tidak belang putih */
+form input[type="date"] {
+    color-scheme: dark !important;
 }
 
-/* OTOMATIS BIKIN TOMBOL "TAMBAH PROJECT" JADI GANTENG */
-form button[type="submit"] {
-    background-color: #38bdf8;
-    color: #09090b;
-    padding: 0.85rem 2rem;
-    border-radius: 9999px;
-    font-weight: 700;
-    font-size: 1rem;
-    border: none;
+form input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(200%);
     cursor: pointer;
-    transition: opacity 0.2s;
-    margin-top: 1.5rem;
-    width: auto;
-    align-self: flex-start;
 }
 
-form button[type="submit"]:hover {
-    opacity: 0.8;
+form input[type="checkbox"] {
+    width: 20px !important;
+    height: 20px !important;
+    accent-color: #38bdf8;
+    margin-top: 0.3rem;
+    cursor: pointer;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+/* Tombol Simpan Data (Merah & Bentuk Kotak 8px) */
+.form-actions button[type="submit"] {
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+    padding: 0.85rem 2rem !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s, transform 0.1s !important;
+    margin-top: 0;
+    width: auto;
+}
+
+.form-actions button[type="submit"]:hover {
+    background-color: #dc2626 !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Tombol Batal (Dibuat Kotak 8px juga biar seragam) */
+.form-actions .btn-batal {
+    background-color: transparent;
+    color: var(--text-muted);
+    padding: 0.85rem 2rem;
+    border-radius: 8px !important; /* Disamakan jadi kotak 8px */
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-actions .btn-batal:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    border-color: var(--text);
 }
 
 @keyframes fadeIn {

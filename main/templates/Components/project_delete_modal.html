@@ -18,7 +18,7 @@
             </button>
             
             <!-- Form untuk mengeksekusi hapus ke backend -->
-            <form action="{% url 'portofolio_main:delete_project' project.id %}" method="POST" style="display: inline;">
+            <form action="{% url 'main:delete_project' project.id %}" method="POST" style="display: inline;">
                 {% csrf_token %}
                 <button type="submit" class="button-delete" style="padding: 0.5rem 1rem;">
                     Ya, Hapus

@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.core import serializers
 from django.contrib import messages
-from main.models import Project
-from main.forms import ProjectForm
+from main.models import Project, Experience
+from main.forms import ProjectForm, ExperienceForm
 
 # Create your views here.
 def show_main(request):
@@ -14,36 +14,70 @@ def show_main(request):
     }
     return render(request, "main.html", context)
 
+# ==========================================
+# VIEWS UNTUK EXPERIENCE (TUGAS 3)
+# ==========================================
 def show_experience(request):
-    # Data manual jika belum diisi di database
-    experience_list = [
-        {
-            'title': 'Staff Departemen Olahraga BEM Fasilkom UI',
-            'get_category_display': 'Organization',
-            'description': 'Aktif berkontribusi sebagai Staff Departemen Olahraga (Depor) BEM Fasilkom UI 2026. Menjadi Penanggung Jawab / Pemegang Unit Kegiatan Olahraga (UKOR) Voli serta terlibat langsung dalam perencanaan dan pelaksanaan program kerja Olimpiade Universitas Indonesia (Olim UI).',
-            'is_ongoing': True,
-        },
-        {
-            'title': 'Koordinator Lapangan - Laskar Biru Merah (LBM)',
-            'get_category_display': 'Organization',
-            'description': 'Bergabung dalam Laskar Biru Merah (LBM), kelompok suporter Fasilkom UI. Bertanggung jawab sebagai Koordinator Lapangan yang mengatur jalannya kegiatan suporteran, koordinasi massa, serta akomodasi dan peralatan.',
-            'is_ongoing': True,
-        }
-    ]
+    # Sekarang datanya kita ambil dari database, bukan hardcode lagi
+    experiences = Experience.objects.all()
     
     context = {
         'name': 'Mohammad Zaky Prastio',
-        'experience_list': experience_list,
+        'experience_list': experiences,
     }
     return render(request, 'experience.html', context)
 
+def create_experience(request):
+    form = ExperienceForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Pengalaman baru berhasil ditambahkan!")
+        return redirect("portofolio_main:show_experience")
+
+    context = {
+        "name": "Mohammad Zaky Prastio",
+        "form": form,
+    }
+    return render(request, "create_experience.html", context)
+
+def update_experience(request, id):
+    experience = get_object_or_404(Experience, pk=id)
+    form = ExperienceForm(request.POST or None, instance=experience)
+    
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        messages.success(request, "Data pengalaman berhasil diupdate!")
+        return redirect('main:show_experience')
+        
+    context = {
+        'name': 'Mohammad Zaky Prastio',
+        'form': form,
+    }
+    return render(request, 'update_experience.html', context)
+
+def delete_experience(request, id):
+    experience = get_object_or_404(Experience, pk=id)
+    if request.method == "POST":
+        experience.delete()
+        messages.success(request, "Pengalaman berhasil dihapus!")
+    return redirect('main:show_experience')
+
+def show_json_experience(request):
+    data = Experience.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+
+# ==========================================
+# VIEWS UNTUK PROJECT (KODE LAMA)
+# ==========================================
 def create_project(request):
     form = ProjectForm(request.POST or None)
 
     if request.method == "POST" and form.is_valid():
         form.save()
         messages.success(request, "Proyek baru berhasil ditambahkan!")
-        return redirect("main:show_projects")
+        return redirect("portofolio_main:show_projects")
 
     context = {
         "name": "Mohammad Zaky Prastio",
@@ -82,5 +116,5 @@ def delete_project(request, project_id):
     if request.method == "POST":
         project.delete()
         messages.success(request, "Project berhasil dihapus!")
-        return redirect("main:show_projects")
-    return redirect("main:show_projects")
+        return redirect("portofolio_main:show_projects")
+    return redirect("portofolio_main:show_projects")

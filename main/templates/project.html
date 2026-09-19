@@ -10,14 +10,14 @@
                 <p class="section-kicker">Karya yang saya bangun</p>
                 <div class="project-header">
                     <h1>Projects</h1>
-                    <a href="{% url 'portofolio_main:create_project' %}" class="button project-add-button">
+                    <a href="{% url 'main:create_project' %}" class="button project-add-button">
                         <span aria-hidden="true">+</span>
                         Tambah Proyek
                     </a>
                 </div>
 
                 <!-- Form Pencarian -->
-                <form method="get" action="{% url 'portofolio_main:show_projects' %}" class="project-search">
+                <form method="get" action="{% url 'main:show_projects' %}" class="project-search">
                     <input type="search"
                            name="title"
                            value="{{ title_query }}"
