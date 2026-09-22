@@ -58,6 +58,7 @@
                         {% else %}
                             <p class="empty-state">Belum ada proyek yang ditambahkan.</p>
                         {% endif %}
+                        {% include "components/project_star.html" with project=project %}
                     {% endfor %}
                 </div>
             </div>

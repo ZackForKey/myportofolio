@@ -10,8 +10,15 @@ from main.views import (
     create_experience,
     update_experience,
     delete_experience,
-    show_json_experience
+    show_json_experience,
+    create_project,
+    delete_project,
+    login_user,
+    logout_user,
+    register,
+    toggle_star,
 )
+from main.views import register, login_user, logout_user
 
 app_name = "main"
 
@@ -30,4 +37,11 @@ urlpatterns = [
     path("experience/<int:id>/update/", update_experience, name="update_experience"),
     path("experience/<int:id>/delete/", delete_experience, name="delete_experience"),
     path("api/experience/", show_json_experience, name="show_json_experience"),
+
+    # --- TUTOR 4 ---!
+    path("register/", register, name="register"),
+    path("login/", login_user, name="login"),
+    path("logout/", logout_user, name="logout"),
+    path('projects/<uuid:project_id>/star/', toggle_star, name='toggle_star'),
+    path('', show_main, name='show_main'),
 ]
