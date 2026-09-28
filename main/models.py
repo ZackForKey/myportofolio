@@ -10,7 +10,7 @@ class Project(models.Model):
     project_url = models.URLField(blank=True)
     project_image_url = models.URLField(blank=True, max_length=500)
     starred_by = models.ManyToManyField(
-      User, related_name='starred_projects', blank=True)
+        User, related_name='starred_projects', blank=True)
 
     def __str__(self):
         return self.title

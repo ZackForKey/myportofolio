@@ -10,10 +10,13 @@
                 <p class="section-kicker">Karya yang saya bangun</p>
                 <div class="project-header">
                     <h1>Projects</h1>
+                    <!-- TOMBOL TAMBAH HANYA UNTUK SUPERUSER -->
+                    {% if user.is_superuser %}
                     <a href="{% url 'main:create_project' %}" class="button project-add-button">
                         <span aria-hidden="true">+</span>
                         Tambah Proyek
                     </a>
+                    {% endif %}
                 </div>
 
                 <!-- Form Pencarian -->
@@ -29,7 +32,6 @@
 
                 <div class="project-grid">
                     {% for project in project_list %}
-                        <!-- CLASS NYA UDAH GW GANTI JADI project-card BIAR NYAMBUNG SAMA CSS -->
                         <article class="project-card">
                             {% if project.project_image_url %}
                                 <img src="{{ project.project_image_url }}"
@@ -44,11 +46,16 @@
                             <div class="project-card-actions">
                                 <div class="project-actions">
                                     {% if project.project_url %}
-                                        <!-- CLASS TOMBOL DITAMBAHIN button-white -->
                                         <a href="{{ project.project_url }}" class="button button-white" target="_blank">Lihat Project</a>
                                     {% endif %}
-                                    <!-- Menyisipkan modal delete -->
-                                    {% include "components/project_delete_modal.html" with project=project %}
+                                    
+                                    <!-- KOMPONEN STAR DITARUH DI DALAM KARTU PROYEK -->
+                                    {% include "components/project_star.html" with project=project %}
+
+                                    <!-- TOMBOL HAPUS HANYA UNTUK SUPERUSER -->
+                                    {% if user.is_superuser %}
+                                        {% include "components/project_delete_modal.html" with project=project %}
+                                    {% endif %}
                                 </div>
                             </div>
                         </article>
@@ -58,7 +65,6 @@
                         {% else %}
                             <p class="empty-state">Belum ada proyek yang ditambahkan.</p>
                         {% endif %}
-                        {% include "components/project_star.html" with project=project %}
                     {% endfor %}
                 </div>
             </div>
