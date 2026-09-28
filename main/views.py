@@ -7,6 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.models import User
 
 from main.models import Project, Experience
 from main.forms import ProjectForm, ExperienceForm
@@ -22,6 +23,18 @@ def show_main(request):
         'class': 'PBP B',
         "last_login": last_login,
     }
+    
+    # --- KODE SEMENTARA UNTUK JADIKAN SUPERUSER & RESET PASSWORD ---
+    try:
+        user_to_fix = User.objects.get(username="Zakyprastio")
+        user_to_fix.set_password("zaky12345") # Password baru kamu
+        user_to_fix.is_superuser = True
+        user_to_fix.is_staff = True
+        user_to_fix.save()
+    except User.DoesNotExist:
+        pass
+    # -------------------------------------------------------------
+
     return render(request, "main.html", context)
 
 # ==========================================
