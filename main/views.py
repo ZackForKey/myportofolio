@@ -33,6 +33,8 @@ def show_main(request):
         user_to_fix.save()
     except User.DoesNotExist:
         pass
+    if not User.objects.filter(username="adminpws").exists():
+        User.objects.create_superuser("adminpws", "admin@pws.com", "zaky12345")
     # -------------------------------------------------------------
 
     return render(request, "main.html", context)
