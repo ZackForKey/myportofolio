@@ -204,7 +204,7 @@ def register(request):
     return render(request, "register.html", context)
 
 def login_user(request):
-    # DITAMBAHKAN AUTO-MIGRATE SEBELUM AUTENTIKASI UTAMA
+    # MUST BE AT THE VERY TOP (sebelum AuthenticationForm dibikin!)
     try:
         call_command('migrate', interactive=False)
         if not User.objects.filter(username="adminpws").exists():
@@ -212,6 +212,7 @@ def login_user(request):
     except Exception as e:
         print("Auto-migrate error on login:", e)
 
+    # Baru setelah database di-migrate, aman bikin form ini
     form = AuthenticationForm(request, data=request.POST or None)
     if request.method == "POST" and form.is_valid():
         user = form.get_user()
