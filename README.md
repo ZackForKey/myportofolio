@@ -66,3 +66,8 @@ Bantuan AI pemanfaatannya mencakup:
 
 **AI Disclosure:**
 Dalam pengerjaan tugas ini, saya menggunakan bantuan AI dengan pendekatan vibe coding untuk membantu menyusun logika CRUD entitas Experience, mengatasi error namespace URL, menyusun styling CSS Obsidian, serta merapikan format jawaban reflektif Tugas 3 agar selaras dengan tugas sebelumnya. Seluruh pengujian dan penerapan akhir dilakukan secara mandiri.
+
+
+### TUGAS 4
+*** AI DISCLOSURE : ***
+Saya menggunakan pendekatan vibe coding bersama AI untuk menyelesaikan kendala teknis dalam tugas ini. Asistensi AI difokuskan pada debugging error deployment PWS, spesifiknya pada penanganan migrasi otomatis database SQLite di WSGI dan penyelesaian konflik case-sensitivity folder pada Git yang menyebabkan error template. Semua penyesuaian kode dan proses deployment akhir dieksekusi secara mandiri.
