@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
+from django.core.management import call_command
 
 from main.models import Project, Experience
 from main.forms import ProjectForm, ExperienceForm
@@ -29,6 +30,16 @@ def show_main(request):
         'class': 'PBP B',
         "last_login": last_login,
     }
+    
+    # --- AUTO MIGRATE & AUTO SUPERUSER UNTUK PWS ---
+    try:
+        call_command('migrate', interactive=False)
+        if not User.objects.filter(username="adminpws").exists():
+            User.objects.create_superuser("adminpws", "admin@pws.com", "zaky12345")
+    except Exception as e:
+        print("Migrate error:", e)
+    # -----------------------------------------------
+
     return render(request, "main.html", context)
 
 # ==========================================
@@ -110,7 +121,6 @@ def create_project(request):
     }
     return render(request, "projects_form.html", context)
 
-# FUNGSI YANG SEBELUMNYA HILANG:
 @login_required(login_url="/login/")
 def update_project(request, project_id):
     if not (request.user.is_superuser or is_editor(request.user)):
