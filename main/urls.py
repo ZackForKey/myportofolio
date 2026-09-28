@@ -4,6 +4,7 @@ from main.views import (
     show_experience, 
     show_projects, 
     create_project, 
+    update_project,
     get_projects_json, 
     delete_project,
     create_experience,
@@ -24,6 +25,7 @@ urlpatterns = [
     # --- PATH UNTUK PROJECT ---
     path("projects/", show_projects, name="show_projects"),
     path("projects/add/", create_project, name="create_project"),
+    path("projects/<uuid:project_id>/update/", update_project, name="update_project"), # <-- DITAMBAHKAN
     path("projects/<uuid:project_id>/delete/", delete_project, name="delete_project"),
     path("projects/<uuid:project_id>/star/", toggle_star, name="toggle_star"),
     path("api/projects/", get_projects_json, name="get_projects_json"),

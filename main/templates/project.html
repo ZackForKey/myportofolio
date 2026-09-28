@@ -52,6 +52,13 @@
                                     <!-- KOMPONEN STAR DITARUH DI DALAM KARTU PROYEK -->
                                     {% include "components/project_star.html" with project=project %}
 
+                                    <!-- TOMBOL EDIT UNTUK SUPERUSER DAN EDITOR -->
+                                    {% if user.is_superuser or is_editor %}
+                                        <a href="{% url 'main:update_project' project.pk %}" class="button button-secondary">
+                                            Edit
+                                        </a>
+                                    {% endif %}
+
                                     <!-- TOMBOL HAPUS HANYA UNTUK SUPERUSER -->
                                     {% if user.is_superuser %}
                                         {% include "components/project_delete_modal.html" with project=project %}

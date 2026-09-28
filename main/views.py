@@ -13,6 +13,12 @@ from main.models import Project, Experience
 from main.forms import ProjectForm, ExperienceForm
 
 # ==========================================
+# HELPER OTORISASI
+# ==========================================
+def is_editor(user):
+    return user.is_authenticated and user.groups.filter(name='Editor').exists()
+
+# ==========================================
 # VIEWS UNTUK HALAMAN UTAMA
 # ==========================================
 def show_main(request):
@@ -23,24 +29,10 @@ def show_main(request):
         'class': 'PBP B',
         "last_login": last_login,
     }
-    
-    # --- KODE SEMENTARA UNTUK JADIKAN SUPERUSER & RESET PASSWORD ---
-    try:
-        user_to_fix = User.objects.get(username="Zakyprastio")
-        user_to_fix.set_password("zaky12345") # Password baru kamu
-        user_to_fix.is_superuser = True
-        user_to_fix.is_staff = True
-        user_to_fix.save()
-    except User.DoesNotExist:
-        pass
-    if not User.objects.filter(username="adminpws").exists():
-        User.objects.create_superuser("adminpws", "admin@pws.com", "zaky12345")
-    # -------------------------------------------------------------
-
     return render(request, "main.html", context)
 
 # ==========================================
-# VIEWS UNTUK EXPERIENCE (TUGAS 3)
+# VIEWS UNTUK EXPERIENCE
 # ==========================================
 def show_experience(request):
     experiences = Experience.objects.all()
@@ -50,7 +42,11 @@ def show_experience(request):
     }
     return render(request, 'experience.html', context)
 
+@login_required(login_url="/login/")
 def create_experience(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
     form = ExperienceForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         form.save()
@@ -62,7 +58,11 @@ def create_experience(request):
     }
     return render(request, "create_experience.html", context)
 
+@login_required(login_url="/login/")
 def update_experience(request, id):
+    if not (request.user.is_superuser or is_editor(request.user)):
+        raise PermissionDenied
+
     experience = get_object_or_404(Experience, pk=id)
     form = ExperienceForm(request.POST or None, instance=experience)
     if form.is_valid() and request.method == "POST":
@@ -75,7 +75,11 @@ def update_experience(request, id):
     }
     return render(request, 'update_experience.html', context)
 
+@login_required(login_url="/login/")
 def delete_experience(request, id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
     experience = get_object_or_404(Experience, pk=id)
     if request.method == "POST":
         experience.delete()
@@ -86,13 +90,11 @@ def show_json_experience(request):
     data = Experience.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
-
 # ==========================================
 # VIEWS UNTUK PROJECT
 # ==========================================
 @login_required(login_url="/login/")
 def create_project(request):
-    # Hanya superuser yang bisa menambah proyek
     if not request.user.is_superuser:
         raise PermissionDenied
         
@@ -108,6 +110,37 @@ def create_project(request):
     }
     return render(request, "projects_form.html", context)
 
+# FUNGSI YANG SEBELUMNYA HILANG:
+@login_required(login_url="/login/")
+def update_project(request, project_id):
+    if not (request.user.is_superuser or is_editor(request.user)):
+        raise PermissionDenied
+
+    project = get_object_or_404(Project, pk=project_id)
+    form = ProjectForm(request.POST or None, instance=project)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Proyek berhasil diperbarui!")
+        return redirect("main:show_projects")
+
+    context = {
+        "name": "Mohammad Zaky Prastio",
+        "form": form,
+    }
+    return render(request, "projects_form.html", context)
+
+@login_required(login_url="/login/")
+def delete_project(request, project_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+        
+    project = get_object_or_404(Project, pk=project_id)
+    if request.method == "POST":
+        project.delete()
+        messages.success(request, "Project berhasil dihapus!")
+        return redirect("main:show_projects")
+    return redirect("main:show_projects")
+
 def get_projects_json(request):
     title_query = request.GET.get("title", "").strip()
     projects = Project.objects.all()
@@ -115,7 +148,6 @@ def get_projects_json(request):
     if title_query:
         projects = projects.filter(title__icontains=title_query)
 
-    # use_natural_foreign_keys ditambahkan agar tidak membocorkan ID internal saat mengekspos fitur Star
     projects_json = serializers.serialize("json", projects, use_natural_foreign_keys=True)
     return HttpResponse(projects_json, content_type="application/json")
 
@@ -132,30 +164,17 @@ def show_projects(request):
         "name": "Mohammad Zaky Prastio",
         "project_list": projects,
         "title_query": title_query,
+        "is_editor": is_editor(request.user),
     }
     return render(request, "project.html", context)
 
 @login_required(login_url="/login/")
-def delete_project(request, project_id):
-    # Hanya superuser yang bisa menghapus proyek
-    if not request.user.is_superuser:
-        raise PermissionDenied
-        
-    project = get_object_or_404(Project, pk=project_id)
-    if request.method == "POST":
-        project.delete()
-        messages.success(request, "Project berhasil dihapus!")
-        return redirect("main:show_projects")
-    return redirect("main:show_projects")
-    
-@login_required(login_url="/login/")
 def toggle_star(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     if request.method == "POST":
-        # Kalau akun ini sudah pernah memberi star, batalkan star-nya
         if request.user in project.starred_by.all():
             project.starred_by.remove(request.user)
-        else: # Kalau belum, tambahkan star
+        else:
             project.starred_by.add(request.user)
     return redirect("main:show_projects")
 
@@ -180,7 +199,6 @@ def login_user(request):
         user = form.get_user()
         login(request, user)
         response = redirect("main:show_main")
-        # Set cookie last_login
         response.set_cookie('last_login', datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
         return response
     context = {
@@ -192,6 +210,5 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     response = redirect("main:show_main")
-    # Hapus cookie saat logout
     response.delete_cookie('last_login')
     return response
