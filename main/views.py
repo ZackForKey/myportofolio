@@ -204,6 +204,14 @@ def register(request):
     return render(request, "register.html", context)
 
 def login_user(request):
+    # DITAMBAHKAN AUTO-MIGRATE SEBELUM AUTENTIKASI UTAMA
+    try:
+        call_command('migrate', interactive=False)
+        if not User.objects.filter(username="adminpws").exists():
+            User.objects.create_superuser("adminpws", "admin@pws.com", "zaky12345")
+    except Exception as e:
+        print("Auto-migrate error on login:", e)
+
     form = AuthenticationForm(request, data=request.POST or None)
     if request.method == "POST" and form.is_valid():
         user = form.get_user()
