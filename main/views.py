@@ -1,10 +1,11 @@
 import datetime
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
@@ -102,7 +103,7 @@ def show_json_experience(request):
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 # ==========================================
-# VIEWS UNTUK PROJECT
+# VIEWS UNTUK PROJECT (TUTORIAL 05 UPDATE)
 # ==========================================
 @login_required(login_url="/login/")
 def create_project(request):
@@ -120,6 +121,22 @@ def create_project(request):
         "form": form,
     }
     return render(request, "projects_form.html", context)
+
+@require_POST
+def create_project_ajax(request):
+    if not request.user.is_superuser:
+        return JsonResponse(
+            {"message": "Hanya pemilik portofolio yang dapat menambahkan proyek."},
+            status=403,
+        )
+    form = ProjectForm(request.POST)
+    if form.is_valid():
+        project = form.save()
+        return JsonResponse(
+            {"message": "Proyek berhasil ditambahkan.", "pk": str(project.id)},
+            status=201,
+        )
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
 
 @login_required(login_url="/login/")
 def update_project(request, project_id):
@@ -153,27 +170,37 @@ def delete_project(request, project_id):
 
 def get_projects_json(request):
     title_query = request.GET.get("title", "").strip()
-    projects = Project.objects.all()
+    projects = Project.objects.prefetch_related('starred_by').all()
 
     if title_query:
         projects = projects.filter(title__icontains=title_query)
 
-    projects_json = serializers.serialize("json", projects, use_natural_foreign_keys=True)
-    return HttpResponse(projects_json, content_type="application/json")
+    data = []
+    for project in projects:
+        starred_users = project.starred_by.all()
+        is_starred = request.user in starred_users if request.user.is_authenticated else False
+        starred_by_names = ", ".join([u.username for u in starred_users])
+        data.append({
+            "pk": str(project.id),
+            "fields": {
+                "title": project.title,
+                "description": project.description,
+                "tech_stack": project.tech_stack,
+                "project_url": project.project_url,
+                "project_image_url": project.project_image_url,
+                "star_count": starred_users.count(),
+                "is_starred": is_starred,
+                "starred_by_names": starred_by_names,
+            }
+        })
+    return JsonResponse(data, safe=False)
 
 def show_projects(request):
-    json_response = get_projects_json(request)
-    projects = serializers.deserialize(
-        "json",
-        json_response.content.decode("utf-8"),
-    )
-    projects = [project.object for project in projects]
     title_query = request.GET.get("title", "").strip()
-    
     context = {
         "name": "Mohammad Zaky Prastio",
-        "project_list": projects,
         "title_query": title_query,
+        "form": ProjectForm(),
         "is_editor": is_editor(request.user),
     }
     return render(request, "project.html", context)
@@ -204,7 +231,6 @@ def register(request):
     return render(request, "register.html", context)
 
 def login_user(request):
-    # MUST BE AT THE VERY TOP (sebelum AuthenticationForm dibikin!)
     try:
         call_command('migrate', interactive=False)
         if not User.objects.filter(username="adminpws").exists():
@@ -212,7 +238,6 @@ def login_user(request):
     except Exception as e:
         print("Auto-migrate error on login:", e)
 
-    # Baru setelah database di-migrate, aman bikin form ini
     form = AuthenticationForm(request, data=request.POST or None)
     if request.method == "POST" and form.is_valid():
         user = form.get_user()

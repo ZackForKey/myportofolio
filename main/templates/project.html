@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block meta %}
     <title>Projects - {{ name }}</title>
 {% endblock meta %}
@@ -10,18 +12,18 @@
                 <p class="section-kicker">Karya yang saya bangun</p>
                 <div class="project-header">
                     <h1>Projects</h1>
-                    <!-- TOMBOL TAMBAH HANYA UNTUK SUPERUSER -->
                     {% if user.is_superuser %}
-                    <a href="{% url 'main:create_project' %}" class="button project-add-button">
+                    <button type="button" class="button project-add-button" popovertarget="add-project-modal">
                         <span aria-hidden="true">+</span>
                         Tambah Proyek
-                    </a>
+                    </button>
                     {% endif %}
                 </div>
 
-                <!-- Form Pencarian -->
-                <form method="get" action="{% url 'main:show_projects' %}" class="project-search">
+                <!-- Form Pencarian (AJAX) -->
+                <form id="project-search-form" class="project-search">
                     <input type="search"
+                           id="search-input"
                            name="title"
                            value="{{ title_query }}"
                            placeholder="Cari berdasarkan nama proyek"
@@ -30,51 +32,30 @@
                     <button type="submit" class="button">Cari</button>
                 </form>
 
-                <div class="project-grid">
-                    {% for project in project_list %}
-                        <article class="project-card">
-                            {% if project.project_image_url %}
-                                <img src="{{ project.project_image_url }}"
-                                     alt="Gambar {{ project.title }}"
-                                     class="project-image">
-                            {% endif %}
-                            
-                            <h2>{{ project.title }}</h2>
-                            <span class="project-category">{{ project.tech_stack }}</span>
-                            <p class="project-description">{{ project.description }}</p>
-                            
-                            <div class="project-card-actions">
-                                <div class="project-actions">
-                                    {% if project.project_url %}
-                                        <a href="{{ project.project_url }}" class="button button-white" target="_blank">Lihat Project</a>
-                                    {% endif %}
-                                    
-                                    <!-- KOMPONEN STAR DITARUH DI DALAM KARTU PROYEK -->
-                                    {% include "components/project_star.html" with project=project %}
-
-                                    <!-- TOMBOL EDIT UNTUK SUPERUSER DAN EDITOR -->
-                                    {% if user.is_superuser or is_editor %}
-                                        <a href="{% url 'main:update_project' project.pk %}" class="button button-secondary">
-                                            Edit
-                                        </a>
-                                    {% endif %}
-
-                                    <!-- TOMBOL HAPUS HANYA UNTUK SUPERUSER -->
-                                    {% if user.is_superuser %}
-                                        {% include "components/project_delete_modal.html" with project=project %}
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </article>
-                    {% empty %}
-                        {% if title_query %}
-                            <p class="empty-state">Tidak ada proyek dengan nama tersebut.</p>
-                        {% else %}
-                            <p class="empty-state">Belum ada proyek yang ditambahkan.</p>
-                        {% endif %}
-                    {% endfor %}
+                <!-- Loading State -->
+                <div id="loading" class="empty-state hide">
+                    <p>Memuat projects...</p>
                 </div>
+
+                <!-- Error State -->
+                <div id="error" class="empty-state hide">
+                    <p>Gagal memuat data projects. Silakan coba lagi.</p>
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty" class="empty-state hide">
+                    <p>Belum ada proyek yang ditambahkan atau ditemukan.</p>
+                </div>
+
+                <!-- Project Grid -->
+                <div id="grid" class="project-grid hide"></div>
             </div>
         </section>
     </main>
+
+{% if user.is_superuser %}
+    {% include "components/project_form_modal.html" %}
+{% endif %}
+
+<script src="{% static 'js/projects_ajax.js' %}"></script>
 {% endblock content %}
