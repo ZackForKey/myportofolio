@@ -11,7 +11,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.core.management import call_command
 from django.views.decorators.csrf import ensure_csrf_cookie
-
+from django.http import HttpResponse, QueryDict
+from django.views.decorators.http import require_http_methods
+from .models import Contact
 from main.models import Project, Experience
 from main.forms import ProjectForm, ExperienceForm
 
@@ -330,3 +332,20 @@ def logout_user(request):
     response = redirect("main:show_main")
     response.delete_cookie('last_login')
     return response
+
+# ==========================================
+# TUTOR 6
+# ==========================================
+
+def contact_list(request):
+    contacts = Contact.objects.all()
+    return render(request, "index.html", {"contacts": contacts})
+
+def contact_add(request):
+    if request.method == "POST":
+        Contact.objects.create(
+            name=request.POST.get("name"),
+            email=request.POST.get("email"),
+        )
+    contacts = Contact.objects.all()
+    return render(request, "_contact_rows.html", {"contacts": contacts})

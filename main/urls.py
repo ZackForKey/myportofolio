@@ -18,7 +18,10 @@ from main.views import (
     create_project_ajax,
     create_experience_ajax,
     toggle_experience_star,
+    
 )
+from . import views
+
 
 app_name = "main"
 
@@ -49,4 +52,8 @@ urlpatterns = [
 
     # --- TUTOR 5 ---
     path("projects/add-ajax/", create_project_ajax, name="create_project_ajax"),
+
+    # --- TUTOR 6 ---
+    path("", views.contact_list, name="contact_list"),
+    path("contacts/add/", views.contact_add, name="contact_add"),
 ]
