@@ -1,6 +1,6 @@
 import datetime
-from django.http import HttpResponse, JsonResponse
-from django.core import serializers
+from django.db import models
+from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
@@ -10,6 +10,7 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.core.management import call_command
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from main.models import Project, Experience
 from main.forms import ProjectForm, ExperienceForm
@@ -46,11 +47,13 @@ def show_main(request):
 # ==========================================
 # VIEWS UNTUK EXPERIENCE
 # ==========================================
+@ensure_csrf_cookie
 def show_experience(request):
-    experiences = Experience.objects.all()
     context = {
         'name': 'Mohammad Zaky Prastio',
-        'experience_list': experiences,
+        'form': ExperienceForm(),
+        'can_edit_experience': request.user.is_superuser or is_editor(request.user),
+        'can_delete_experience': request.user.is_superuser,
     }
     return render(request, 'experience.html', context)
 
@@ -99,8 +102,78 @@ def delete_experience(request, id):
     return redirect('main:show_experience')
 
 def show_json_experience(request):
-    data = Experience.objects.all()
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    search_query = request.GET.get("search", "").strip()
+    experiences = Experience.objects.prefetch_related("starred_by").all()
+    if search_query:
+        experiences = experiences.filter(
+            models.Q(title__icontains=search_query)
+            | models.Q(company__icontains=search_query)
+            | models.Q(description__icontains=search_query)
+        )
+
+    data = []
+    for experience in experiences:
+        starred_users = list(experience.starred_by.all())
+        data.append({
+            "id": experience.id,
+            "title": experience.title,
+            "company": experience.company,
+            "start_date": experience.start_date.isoformat(),
+            "is_active": experience.is_active,
+            "description": experience.description,
+            "star_count": len(starred_users),
+            "is_starred": request.user.is_authenticated and any(
+                user.pk == request.user.pk for user in starred_users
+            ),
+        })
+    return JsonResponse(data, safe=False)
+
+
+def create_experience_ajax(request):
+    if request.method != "POST":
+        return JsonResponse({"message": "Metode tidak diizinkan."}, status=405)
+    if not request.user.is_authenticated:
+        return JsonResponse({"message": "Silakan login untuk menambahkan pengalaman."}, status=403)
+    if not request.user.is_superuser:
+        return JsonResponse({"message": "Hanya pemilik portofolio yang dapat menambahkan pengalaman."}, status=403)
+
+    form = ExperienceForm(request.POST)
+    if not form.is_valid():
+        return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
+
+    experience = form.save()
+    return JsonResponse({
+        "message": "Pengalaman berhasil ditambahkan.",
+        "experience": {
+            "id": experience.id,
+            "title": experience.title,
+            "company": experience.company,
+            "start_date": experience.start_date.isoformat(),
+            "is_active": experience.is_active,
+            "description": experience.description,
+            "star_count": 0,
+            "is_starred": False,
+        },
+    }, status=201)
+
+
+def toggle_experience_star(request, experience_id):
+    if request.method != "POST":
+        return JsonResponse({"message": "Metode tidak diizinkan."}, status=405)
+    if not request.user.is_authenticated:
+        return JsonResponse({"message": "Silakan login untuk memberi star."}, status=403)
+
+    experience = get_object_or_404(Experience, pk=experience_id)
+    if experience.starred_by.filter(pk=request.user.pk).exists():
+        experience.starred_by.remove(request.user)
+        is_starred = False
+    else:
+        experience.starred_by.add(request.user)
+        is_starred = True
+    return JsonResponse({
+        "star_count": experience.starred_by.count(),
+        "is_starred": is_starred,
+    })
 
 # ==========================================
 # VIEWS UNTUK PROJECT (TUTORIAL 05 UPDATE)
@@ -195,6 +268,7 @@ def get_projects_json(request):
         })
     return JsonResponse(data, safe=False)
 
+@ensure_csrf_cookie
 def show_projects(request):
     title_query = request.GET.get("title", "").strip()
     context = {

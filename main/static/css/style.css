@@ -284,6 +284,85 @@ details[open] .arrow-btn {
     margin: 0 auto;
 }
 
+.hide {
+    display: none !important;
+}
+
+.experience-card-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.experience-delete-form {
+    margin: 0;
+}
+
+.experience-card-actions .button,
+.experience-json-link .button {
+    color: var(--text);
+    background: #1e293b;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.9rem;
+    text-decoration: none;
+    cursor: pointer;
+    font: inherit;
+}
+
+.experience-json-link {
+    margin-bottom: 1.5rem;
+}
+
+.experience-modal {
+    width: min(560px, calc(100vw - 2rem));
+    max-height: 90vh;
+    overflow-y: auto;
+    color: var(--text);
+    background: #111827;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.experience-modal::backdrop {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.experience-modal__content {
+    position: relative;
+}
+
+.experience-modal__close {
+    position: absolute;
+    top: -0.75rem;
+    right: -0.5rem;
+    color: var(--text);
+    background: transparent;
+    border: 0;
+    font-size: 1.75rem;
+    cursor: pointer;
+}
+
+.experience-modal .project-form {
+    max-width: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+}
+
+.experience-modal .project-form-modal__actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.experience-modal .project-form-modal__actions .button {
+    flex: 1;
+}
+
 /* Card Obsidian Dark */
 .exp-card {
     background-color: rgba(24, 24, 27, 0.65);

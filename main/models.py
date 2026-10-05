@@ -22,6 +22,8 @@ class Experience(models.Model):
     start_date = models.DateField()                     # Tipe 2: Date (DateField)
     is_active = models.BooleanField(default=True)       # Tipe 3: Boolean (BooleanField)
     description = models.TextField()                    # Tipe 4: Text (TextField)
+    starred_by = models.ManyToManyField(
+        User, related_name='starred_experiences', blank=True)
 
     def __str__(self):
         return f"{self.title} at {self.company}"

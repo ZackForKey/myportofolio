@@ -12,7 +12,7 @@ def create_superuser(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('main', '0001_initial'), # Sesuaikan dengan nama file migrasi terakhir di foldermu kalau beda
+        ('main', '0006_alter_experience_id'),
     ]
 
     operations = [

@@ -71,3 +71,13 @@ Dalam pengerjaan tugas ini, saya menggunakan bantuan AI dengan pendekatan vibe c
 ### TUGAS 4
 *** AI DISCLOSURE : ***
 Saya menggunakan pendekatan vibe coding bersama AI untuk menyelesaikan kendala teknis dalam tugas ini. Asistensi AI difokuskan pada debugging error deployment PWS, spesifiknya pada penanganan migrasi otomatis database SQLite di WSGI dan penyelesaian konflik case-sensitivity folder pada Git yang menyebabkan error template. Semua penyesuaian kode dan proses deployment akhir dieksekusi secara mandiri.
+
+### Tugas 5
+
+1. **Mengapa debouncing penting untuk pencarian?** Debouncing menunggu sampai pengguna berhenti mengetik sebentar sebelum mengirim permintaan. Ini mencegah satu permintaan dikirim untuk setiap karakter, mengurangi pekerjaan server, dan membuat hasil pencarian tidak saling mendahului. Pada halaman Experience, jeda pencarian adalah 300 milidetik.
+
+2. **Apa peran `fetch()` dan `await` dalam AJAX?** `fetch()` mengirim permintaan HTTP dari browser ke endpoint Django tanpa memuat ulang seluruh halaman. `await` menunggu respons dan hasil parsing JSON sebelum JavaScript memperbarui daftar atau menampilkan pesan status. Dengan pola ini, halaman dapat menunjukkan loading, hasil kosong, dan kesalahan secara langsung.
+
+3. **Mengapa JavaScript dapat menambah risiko XSS?** Template Django meng-escape nilai secara otomatis saat dirender sebagai teks. JavaScript yang memasukkan data server ke HTML dengan `innerHTML` dapat melewati perlindungan itu sehingga string berisi markup berbahaya mungkin dijalankan browser. Daftar Experience menggunakan `textContent`/pembuatan elemen DOM untuk teks, dan `ExperienceForm` menghapus tag HTML dari field teks di server.
+
+**AI disclosure dan penggunaan:** Saya menggunakan OpenAI Codex (GPT-6) sebagai asisten untuk membaca implementasi yang ada, memetakan persyaratan tugas, membantu perubahan AJAX/validasi/permission dan penanganan bug, serta menyusun tes dan dokumentasi ini. Strategi prompting yang digunakan adalah memberikan daftar persyaratan lengkap, meminta pemeriksaan repository sebelum perubahan, lalu memverifikasi alur dengan pemeriksaan Django dan tes. Area yang dibantu mencakup endpoint JSON dan add/star, JavaScript pencarian/modal/toast, sanitasi form, perbaikan logout dan pemuatan JavaScript proyek, migrasi, serta tes. Rujukan percakapan AI adalah sesi Codex pada tugas repository ini; tidak ada transkrip atau tautan percakapan terpisah yang dibuat. PDF `tugas-5.pdf` tidak tersedia di berkas repository saat implementasi, sehingga daftar persyaratan yang ditempelkan pada permintaan digunakan sebagai spesifikasi.

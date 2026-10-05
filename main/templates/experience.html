@@ -7,61 +7,63 @@
 
 {% block content %}
 <main>
-    <section class="experience-section" id="experience" style="padding-top: 2rem; min-height: 80vh;">
+    <section class="experience-section" id="experience"
+             data-list-url="{% url 'main:show_json_experience' %}"
+             data-star-url-template="{% url 'main:toggle_experience_star' experience_id=0 %}"
+             data-update-url-template="{% url 'main:update_experience' id=0 %}"
+             data-delete-url-template="{% url 'main:delete_experience' id=0 %}"
+             data-can-edit="{{ can_edit_experience|yesno:'true,false' }}"
+             data-can-delete="{{ can_delete_experience|yesno:'true,false' }}">
         <div class="container">
-            <p class="section-kicker">PERJALANAN & PENGALAMAN</p>
-            <h1 class="section-title">Organizational Experience</h1>
-            
-            <!-- TOMBOL CREATE & JSON (Syarat Tugas 3) -->
-            <div style="margin-bottom: 2rem; display: flex; gap: 10px;">
-                <a href="{% url 'main:create_experience' %}">
-                    <button style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">+ Tambah Pengalaman</button>
-                </a>
-                <a href="{% url 'main:show_json_experience' %}" target="_blank">
-                    <button style="padding: 10px 20px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Lihat Data JSON</button>
-                </a>
+            <p class="section-kicker">PERJALANAN &amp; PENGALAMAN</p>
+            <div class="project-header">
+                <h1 class="section-title">Organizational Experience</h1>
+                {% if user.is_superuser %}
+                <button type="button" class="button project-add-button" id="open-experience-modal">
+                    <span aria-hidden="true">+</span> Tambah Pengalaman
+                </button>
+                {% endif %}
             </div>
 
-            <div class="exp-container">
-                {% for experience in experience_list %}
-                    <details class="exp-card" style="margin-bottom: 1rem;">
-                        <summary class="exp-header">
-                            <div class="exp-title-group">
-                                <h3>{{ experience.title }}</h3>
-                                <p class="exp-sub">
-                                    {{ experience.company }} &bull; Mulai: {{ experience.start_date|date:"d M Y" }} &bull; 
-                                    {% if experience.is_active %}
-                                        Sedang berlangsung
-                                    {% else %}
-                                        Selesai
-                                    {% endif %}
-                                </p>
-                            </div>
-                            <span class="exp-arrow">&#9660;</span>
-                        </summary>
-                        <div class="exp-details">
-                            <p>{{ experience.description }}</p>
-                            
-                            <!-- TOMBOL UPDATE & DELETE (Syarat Tugas 3) -->
-                            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eaeaea; display: flex; gap: 10px;">
-                                <a href="{% url 'main:update_experience' experience.id %}">
-                                    <button style="padding: 5px 15px; background-color: #ffc107; color: black; border: none; border-radius: 4px; cursor: pointer;">Edit</button>
-                                </a>
-                                
-                                <form action="{% url 'main:delete_experience' experience.id %}" method="POST" style="display:inline;">
-                                    {% csrf_token %}
-                                    <button type="submit" onclick="return confirm('Yakin ingin menghapus pengalaman ini?');" style="padding: 5px 15px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Hapus</button>
-                                </form>
-                            </div>
-                        </div>
-                    </details>
-                {% empty %}
-                    <p class="empty-state" style="text-align: center; color: #666; padding: 2rem; border: 2px dashed #ccc; border-radius: 8px;">
-                        Belum ada pengalaman yang ditambahkan. Silakan klik tombol "Tambah Pengalaman".
-                    </p>
-                {% endfor %}
-            </div>
+            <form id="experience-search-form" class="project-search" role="search">
+                <input type="search" id="experience-search-input" class="project-search__input"
+                       placeholder="Cari posisi, organisasi, atau deskripsi" aria-label="Cari pengalaman">
+                <button type="submit" class="button">Cari</button>
+            </form>
+            <p class="experience-json-link"><a class="button button-secondary" href="{% url 'main:show_json_experience' %}" target="_blank" rel="noopener noreferrer">Lihat Data JSON</a></p>
+
+            <p id="experience-loading" class="empty-state" role="status" aria-live="polite">Memuat pengalaman...</p>
+            <p id="experience-error" class="empty-state hide" role="alert">
+                Gagal memuat pengalaman. Silakan coba lagi.
+                <button type="button" id="retry-experience-load" class="button">Coba lagi</button>
+            </p>
+            <p id="experience-empty" class="empty-state hide">Belum ada pengalaman yang ditambahkan atau ditemukan.</p>
+            <div id="experience-list" class="exp-container hide" aria-live="polite"></div>
         </div>
     </section>
 </main>
+
+{% if user.is_superuser %}
+<dialog id="experience-modal" class="experience-modal" aria-labelledby="experience-modal-title">
+    <div class="experience-modal__content">
+        <button type="button" id="close-experience-modal" class="experience-modal__close" aria-label="Tutup">×</button>
+        <h2 id="experience-modal-title">Tambah Pengalaman Baru</h2>
+        <div id="experience-form-errors" class="form-error" role="alert" aria-live="polite"></div>
+        <form id="experience-form" method="post" action="{% url 'main:create_experience_ajax' %}" class="project-form">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
+            {% endfor %}
+            <div class="project-form-modal__actions">
+                <button type="button" id="cancel-experience-modal" class="button button-secondary">Batal</button>
+                <button type="submit" class="button">Tambah Pengalaman</button>
+            </div>
+        </form>
+    </div>
+</dialog>
+{% endif %}
+<script src="{% static 'js/experience_ajax.js' %}" defer></script>
 {% endblock content %}

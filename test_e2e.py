@@ -1,39 +1,35 @@
 import os
 import sys
-import django
-from dotenv import load_dotenv
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
-load_dotenv()
+def main():
+    from dotenv import load_dotenv
+    from selenium import webdriver
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
 
-USER_PASSWORD = os.getenv("E2E_USER_PASSWORD")
-ADMIN_PASSWORD = os.getenv("E2E_ADMIN_PASSWORD")
+    load_dotenv()
+    user_password = os.getenv("E2E_USER_PASSWORD")
+    admin_password = os.getenv("E2E_ADMIN_PASSWORD")
+    if not user_password or not admin_password:
+        sys.exit("E2E_USER_PASSWORD dan E2E_ADMIN_PASSWORD belum diisi di berkas .env.")
 
-if not USER_PASSWORD or not ADMIN_PASSWORD:
-    sys.exit("E2E_USER_PASSWORD dan E2E_ADMIN_PASSWORD belum diisi di berkas .env.")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "portofolio.settings")
+    import django
+    django.setup()
+    from django.contrib.auth.models import User
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "portofolio.settings")
-django.setup()
-from django.contrib.auth.models import User
-
-def setup_users():
     user, _ = User.objects.get_or_create(username="burhan_test")
-    user.set_password(USER_PASSWORD)
+    user.set_password(user_password)
     user.is_superuser = False
     user.is_staff = False
     user.save()
-    
     admin, _ = User.objects.get_or_create(username="admin_test")
-    admin.set_password(ADMIN_PASSWORD)
+    admin.set_password(admin_password)
     admin.is_superuser = True
     admin.is_staff = True
     admin.save()
 
-def main():
-    setup_users()
     options = webdriver.ChromeOptions()
     
     if "--headless" in sys.argv:
@@ -64,7 +60,7 @@ def main():
         
         # 2. Cek login user biasa dan cookie sesi
         driver.find_element(By.NAME, "username").send_keys("burhan_test")
-        driver.find_element(By.NAME, "password").send_keys(USER_PASSWORD)
+        driver.find_element(By.NAME, "password").send_keys(user_password)
         driver.find_element(By.XPATH, "//button[@type='submit']").click()
         wait.until(EC.url_to_be(f"{base_url}/"))
         wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "nav-user")))
@@ -84,7 +80,7 @@ def main():
         
         driver.get(f"{base_url}/login/")
         wait.until(EC.presence_of_element_located((By.NAME, "username"))).send_keys("admin_test")
-        driver.find_element(By.NAME, "password").send_keys(ADMIN_PASSWORD)
+        driver.find_element(By.NAME, "password").send_keys(admin_password)
         driver.find_element(By.XPATH, "//button[@type='submit']").click()
         wait.until(EC.url_to_be(f"{base_url}/"))
         wait.until(EC.text_to_be_present_in_element((By.CLASS_NAME, "nav-user"), "admin_test"))

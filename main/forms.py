@@ -62,9 +62,10 @@ class ProjectForm(ModelForm):
         return strip_tags(self.cleaned_data["tech_stack"]).strip()
 
     def clean_description(self):
-        return strip_tags(self.cleaned_data["description"]).strip()
-
-
+        description = strip_tags(self.cleaned_data["description"]).strip()
+        if not description:
+            raise ValidationError("Deskripsi tidak boleh hanya berisi tag HTML.")
+        return description
 class ExperienceForm(ModelForm):
     class Meta:
         model = Experience
@@ -114,3 +115,21 @@ class ExperienceForm(ModelForm):
                 }
             ),
         }
+
+    def clean_title(self):
+        title = strip_tags(self.cleaned_data["title"]).strip()
+        if not title:
+            raise ValidationError("Posisi tidak boleh hanya berisi tag HTML.")
+        return title
+
+    def clean_company(self):
+        company = strip_tags(self.cleaned_data["company"]).strip()
+        if not company:
+            raise ValidationError("Organisasi tidak boleh hanya berisi tag HTML.")
+        return company
+
+    def clean_description(self):
+        description = strip_tags(self.cleaned_data["description"]).strip()
+        if not description:
+            raise ValidationError("Deskripsi tidak boleh hanya berisi tag HTML.")
+        return description

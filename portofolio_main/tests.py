@@ -1,51 +1,49 @@
+from datetime import date
+
 from django.test import TestCase
 from django.urls import reverse
-from django.utils import timezone
-from portofolio_main.models import Experience
 
-class MainTest(TestCase):
+from main.models import Experience
+
+
+class PortfolioRoutingTests(TestCase):
     def setUp(self):
         self.experience = Experience.objects.create(
-            title="Mahasiswa Fasilkom Semester 3",
-            description="Sedang belajar Pengembangan Web dan framework Django.",
-            category="Full Time",
+            title="Computer Science Student",
+            company="Fasilkom UI",
+            start_date=date(2025, 9, 1),
+            is_active=True,
+            description="Studying web development and Django.",
         )
 
     def test_main_url_is_accessible(self):
-        response = self.client.get(reverse("portofolio_main:show_main"))
+        response = self.client.get(reverse("main:show_main"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "main.html")
         self.assertNotContains(response, self.experience.title)
-        self.assertContains(response, f'href="{reverse("portofolio_main:show_experience")}"')
+        self.assertContains(response, f'href="{reverse("main:show_experience")}"')
 
     def test_nonexistent_page_returns_404(self):
-        response = self.client.get("/halaman-yang-tidak-ada/")
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(self.client.get("/halaman-yang-tidak-ada/").status_code, 404)
 
-    def test_experience_model(self):
-        self.assertEqual(str(self.experience), "Mahasiswa Fasilkom Semester 3")
-        self.assertEqual(self.experience.category, "Full Time")
-        self.assertTrue(self.experience.is_ongoing)
+    def test_experience_page_uses_ajax_skeleton_and_json_endpoint(self):
+        page = self.client.get(reverse("main:show_experience"))
+        self.assertEqual(page.status_code, 200)
+        self.assertTemplateUsed(page, "experience.html")
+        self.assertNotContains(page, self.experience.title)
+        self.assertContains(page, 'id="experience-loading"')
 
-    def test_experience_page(self):
-        response = self.client.get(reverse("portofolio_main:show_experience"))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "experience.html")
-        self.assertContains(response, self.experience.title)
-        self.assertContains(response, self.experience.description)
-        self.assertContains(response, "Full Time")
-        self.assertContains(response, "Sedang berlangsung")
-        self.assertContains(response, f'href="{reverse("portofolio_main:show_main")}"')
+        data = self.client.get(reverse("main:show_json_experience")).json()
+        self.assertEqual(data[0]["title"], self.experience.title)
+        self.assertTrue(data[0]["is_active"])
 
-    def test_empty_experience_page(self):
+    def test_empty_experience_state_is_present(self):
         Experience.objects.all().delete()
-        response = self.client.get(reverse("portofolio_main:show_experience"))
-        self.assertContains(response, "Belum ada pengalaman yang ditambahkan.")
+        response = self.client.get(reverse("main:show_experience"))
+        self.assertContains(response, "Belum ada pengalaman yang ditambahkan atau ditemukan.")
 
-    def test_completed_experience(self):
-        self.experience.ended_at = timezone.now()
+    def test_completed_experience_is_returned_as_inactive(self):
+        self.experience.is_active = False
         self.experience.save()
-        response = self.client.get(reverse("portofolio_main:show_experience"))
-        self.assertFalse(self.experience.is_ongoing)
-        self.assertContains(response, "Selesai")
-        self.assertNotContains(response, "Sedang berlangsung")
+        data = self.client.get(reverse("main:show_json_experience")).json()
+        self.assertFalse(data[0]["is_active"])
