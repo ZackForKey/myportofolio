@@ -703,10 +703,11 @@ details[open] .exp-arrow {
     font-size: 0.95rem;
 }
 
-/* UPDATE: Menambahkan password dan email ke input selector */
+/* UPDATE: Menambahkan password, email, dan search ke input selector */
 form input[type="text"],
 form input[type="password"],
 form input[type="email"],
+form input[type="search"],
 form input[type="url"],
 form input[type="date"],
 form textarea {
@@ -722,6 +723,17 @@ form textarea {
     outline: none !important;
     box-sizing: border-box !important;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+form input[type="text"]:focus,
+form input[type="password"]:focus,
+form input[type="email"]:focus,
+form input[type="search"]:focus,
+form input[type="url"]:focus,
+form input[type="date"]:focus,
+form textarea:focus {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2) !important;
 }
 
 form textarea {
@@ -778,7 +790,7 @@ form input[type="checkbox"] {
     background-color: transparent;
     color: var(--text-muted);
     padding: 0.85rem 2rem;
-    border-radius: 8px !important; /* Disamakan jadi kotak 8px */
+    border-radius: 8px !important;
     font-weight: 600;
     text-decoration: none;
     border: 1px solid var(--border);
@@ -823,7 +835,7 @@ form input[type="checkbox"] {
 }
 
 .button-star.is-starred {
-    background: #3b82f6; /* Warna biru saat di-star */
+    background: #3b82f6;
     color: white;
     border-color: #3b82f6;
 }
@@ -844,7 +856,7 @@ form input[type="checkbox"] {
     padding: 2rem;
     backdrop-filter: blur(12px);
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-    margin: 1.5rem auto; /* Align kiri sesuai layout kamu */
+    margin: 1.5rem auto;
     max-width: 450px;
     text-align: left;
 }
@@ -863,7 +875,7 @@ form input[type="checkbox"] {
 }
 
 .form-message {
-    background-color: rgba(16, 185, 129, 0.1); /* Emerald */
+    background-color: rgba(16, 185, 129, 0.1);
     color: #34d399;
     padding: 1rem;
     border-radius: 8px;
@@ -874,7 +886,7 @@ form input[type="checkbox"] {
 }
 
 .form-error {
-    color: #ef4444; /* Red */
+    color: #ef4444;
     font-size: 0.85rem;
     margin-top: 0.25rem;
 }
@@ -947,8 +959,225 @@ form input[type="checkbox"] {
     color: var(--text-muted);
 }
 
-/* Modifikasi border kiri berdasarkan tipe notifikasi */
 .toast-success { border-left: 4px solid #22c55e; }
 .toast-error { border-left: 4px solid #b42318; }
 .toast-normal { border-left: 4px solid var(--accent); }
 
+
+/* ==========================================================================
+   --- TAMBAHAN KHUSUS SECTION KONTAK (HTMX TUTORIAL) ---
+   ========================================================================== */
+
+/* Styling Form Inline Tambah Kontak */
+#contacts form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    background-color: rgba(24, 24, 27, 0.65);
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+    border-radius: 12px;
+    backdrop-filter: blur(12px);
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+#contacts form input[type="text"],
+#contacts form input[type="email"] {
+    flex: 1 1 200px;
+    border-radius: 8px !important; /* Dibuat seragam 8px */
+    padding: 0.75rem 1rem !important;
+}
+
+#contacts form button[type="submit"] {
+    background-color: #2563eb;
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    font-family: 'Space Grotesk', sans-serif;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+#contacts form button[type="submit"]:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+/* Indicator HTMX Search */
+.htmx-indicator {
+    display: none;
+    font-size: 0.85rem;
+    color: #38bdf8;
+    margin-left: 0.5rem;
+}
+
+.htmx-request .htmx-indicator,
+.htmx-request.htmx-indicator {
+    display: inline-block;
+}
+
+/* Tabel Kontak Dark Obsidian */
+#contacts table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: rgba(24, 24, 27, 0.65);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+}
+
+#contacts th {
+    background-color: rgba(9, 9, 11, 0.8);
+    color: var(--accent);
+    font-weight: 700;
+    text-align: left;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.95rem;
+}
+
+#contacts td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+#contacts tr:last-child td {
+    border-bottom: none;
+}
+
+#contacts tr:hover td {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Tombol Hapus Kontak HTMX */
+#contacts button[hx-delete] {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 0.4rem 0.85rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-family: 'Space Grotesk', sans-serif;
+    transition: all 0.2s ease;
+}
+
+#contacts button[hx-delete]:hover {
+    background-color: #ef4444;
+    color: #ffffff;
+    border-color: #ef4444;
+}
+
+/* Styling Input Cari Kontak HTMX */
+.contact-search-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    max-width: 400px;
+}
+
+.contact-search-input,
+#contacts input[type="search"] {
+    width: 100% !important;
+    padding: 0.75rem 1.25rem !important;
+    border-radius: 8px !important;
+    border: 1px solid var(--border) !important;
+    background-color: rgba(9, 9, 11, 0.8) !important;
+    color: #f8fafc !important;
+    font-size: 0.95rem !important;
+    font-family: 'Space Grotesk', sans-serif !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact-search-input:focus,
+#contacts input[type="search"]:focus {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2) !important;
+}
+
+/* ==========================================================================
+   --- STYLING KHUSUS INLINE EDIT KONTAK HTMX ---
+   ========================================================================== */
+
+/* Tombol Edit Kontak */
+#contacts button[hx-get],
+#contacts .btn-edit {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.85rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-family: 'Space Grotesk', sans-serif;
+    transition: all 0.2s ease;
+    margin-left: 0.4rem;
+}
+
+#contacts button[hx-get]:hover,
+#contacts .btn-edit:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: var(--accent);
+}
+
+/* Input di Dalam Form Edit Baris Tabel */
+#contacts tr form input[type="text"],
+#contacts tr form input[type="email"] {
+    width: 100% !important;
+    padding: 0.5rem 0.85rem !important;
+    border-radius: 6px !important;
+    border: 1px solid var(--border) !important;
+    background-color: rgba(9, 9, 11, 0.9) !important;
+    color: #f8fafc !important;
+    font-size: 0.9rem !important;
+    font-family: 'Space Grotesk', sans-serif !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+}
+
+#contacts tr form input[type="text"]:focus,
+#contacts tr form input[type="email"]:focus {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2) !important;
+}
+
+/* Tombol Batal Edit */
+#contacts tr form button[hx-get],
+#contacts tr form .btn-cancel {
+    background-color: transparent !important;
+    color: var(--text-muted) !important;
+    border: 1px solid var(--border) !important;
+    padding: 0.4rem 0.85rem !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    cursor: pointer !important;
+    font-family: 'Space Grotesk', sans-serif !important;
+    transition: all 0.2s ease !important;
+    margin-top: 0.4rem !important;
+}
+
+#contacts tr form button[hx-get]:hover,
+#contacts tr form .btn-cancel:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    border-color: var(--accent) !important;
+}
+
+/* Tombol Simpan Edit (Biar seragam ukurannya) */
+#contacts tr form button[type="submit"] {
+    padding: 0.4rem 1rem !important;
+    font-size: 0.85rem !important;
+    border-radius: 6px !important;
+}

@@ -111,6 +111,18 @@
             </form>
 
             <h2 style="margin-top: 2rem;">Daftar Kontak</h2>
+
+            <!-- FITUR SEARCH HTMX -->
+            <div style="margin-bottom: 1rem;">
+                <input type="search" name="q" placeholder="Cari kontak..."
+                        class="contact-search-input"
+                        hx-get="{% url 'main:contact_search' %}"
+                        hx-trigger="keyup changed delay:300ms, search"
+                        hx-target="#contact-rows"
+                        hx-indicator="#search-indicator">
+                <span id="search-indicator" class="htmx-indicator">Mencari...</span>
+            </div>
+
             <table>
                 <thead>
                     <tr>

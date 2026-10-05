@@ -349,3 +349,31 @@ def contact_add(request):
         )
     contacts = Contact.objects.all()
     return render(request, "_contact_rows.html", {"contacts": contacts})
+
+@require_http_methods(["DELETE"])
+def contact_delete(request, pk):
+    contact = get_object_or_404(Contact, pk=pk)
+    contact.delete()
+    return HttpResponse("")
+
+def contact_search(request):
+    query = request.GET.get("q", "")
+    contacts = Contact.objects.filter(name__icontains=query) if query else Contact.objects.all()
+    return render(request, "_contact_rows.html", {"contacts": contacts})
+
+def contact_edit(request, pk):
+    contact = get_object_or_404(Contact, pk=pk)
+    return render(request, "_contact_edit_row.html", {"contact": contact})
+
+def contact_row(request, pk):
+    contact = get_object_or_404(Contact, pk=pk)
+    return render(request, "_contact_row.html", {"contact": contact})
+
+@require_http_methods(["PUT"])
+def contact_update(request, pk):
+    contact = get_object_or_404(Contact, pk=pk)
+    data = QueryDict(request.body)
+    contact.name = data.get("name", contact.name)
+    contact.email = data.get("email", contact.email)
+    contact.save()
+    return render(request, "_contact_row.html", {"contact": contact})
