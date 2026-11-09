@@ -4,6 +4,7 @@
 {% block meta %}
     <title>{{ name }} - Portfolio</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/main.js' %}"></script>
 {% endblock meta %}
 
 {% block content %}
@@ -48,69 +49,30 @@
         <!-- SECTION EDUCATION -->
         <section id="education" class="education-section">
             <div class="container">
-                <h2>Riwayat Pendidikan</h2>
-                <div class="edu-container">
-                    
-                    <!-- Item 1: Universitas Indonesia -->
-                    <div class="edu-card">
-                        <div class="edu-header">
-                            <img src="{% static 'img/Pacil.png' %}" alt="Logo UI" class="edu-logo">
-                            <div class="edu-title-group">
-                                <h3>Universitas Indonesia (UI)</h3>
-                                <p class="edu-sub">S1 Ilmu Komputer &bull; 2025 - Sekarang</p>
-                            </div>
-                            <details class="edu-dropdown">
-                                <summary class="arrow-btn" title="Lihat detail kegiatan">&#9660;</summary>
-                                <div class="edu-details">
-                                    <ul>
-                                        <li>Mengikuti organisasi BEM Departemen Olahraga.</li>
-                                        <li>Meminati Bidang Robotik dan software engineering.</li>
-                                        <li>Sedang Berusaha Menaikan IPK :D.</li>
-                                    </ul>
-                                </div>
-                            </details>
-                        </div>
-                    </div>
-
-                    <!-- Item 2: SMA -->
-                    <div class="edu-card">
-                        <div class="edu-header">
-                            <img src="{% static 'img/LogoPres.png' %}" alt="Logo SMA" class="edu-logo">
-                            <div class="edu-title-group">
-                                <h3>SMA Presiden</h3>
-                                <p class="edu-sub">MIPA &bull; 2022 - 2025</p>
-                            </div>
-                            <details class="edu-dropdown">
-                                <summary class="arrow-btn" title="Lihat detail kegiatan">&#9660;</summary>
-                                <div class="edu-details">
-                                    <ul>
-                                        <li>Menjabat sebagai Wakil Pradana Pramuka.</li>
-                                        <li>Aktif mengikuti kegiatan OSIS dan Paskibra.</li>
-                                        <li>Lulus dengan prestasi Non Akademik dan Akademik yang Baik.</li>
-                                    </ul>
-                                </div>
-                            </details>
-                        </div>
-                    </div>
-
+                <h2>Riwayat Pendidikan & Pengalaman</h2>
+                <!-- Kontainer kosong ini bakal diisi otomatis sama JavaScript dari API -->
+                <div class="edu-container" id="api-experience-container">
+                    <p style="text-align: center;">Loading data...</p>
                 </div>
             </div>
         </section>
+        </section>
 
-        <!-- SECTION KONTAK & FORM HTMX -->
+        <!-- SECTION KONTAK -->
         <section id="contacts" class="container" style="margin-top: 2rem;">
-            <h1>Tambah Kontak</h1>
-            <form hx-post="{% url 'main:contact_add' %}"
-                  hx-target="#contact-rows"
-                  hx-swap="innerHTML"
-                  hx-on::after-request="if (event.detail.successful) this.reset()">
-              {% csrf_token %}
-              <input type="text" name="name" placeholder="Nama" required>
-              <input type="email" name="email" placeholder="Email" required>
-              <button type="submit">Tambah</button>
-            </form>
+            <h1>Hubungi Saya</h1>
+            
+            <!-- Notifikasi kalau pesan berhasil dikirim -->
+            <div id="contact-alert" style="display: none; padding: 10px; background: #dcfce3; color: #166534; border-radius: 5px; margin-bottom: 1rem;">
+                Pesan berhasil dikirim!
+            </div>
 
-            <h2 style="margin-top: 2rem;">Daftar Kontak</h2>
+            <form id="api-contact-form">
+              <input type="text" id="contact-name" placeholder="Nama" required>
+              <input type="email" id="contact-email" placeholder="Email" required>
+              <button type="submit">Kirim</button>
+            </form>
+        </section>
 
             <!-- FITUR SEARCH HTMX -->
             <div style="margin-bottom: 1rem;">

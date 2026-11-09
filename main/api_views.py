@@ -6,12 +6,12 @@ from rest_framework.decorators import (
     authentication_classes,
     permission_classes,
 )
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.response import Response
 
-from main.models import Project
+from main.models import Project,Experience,Contact
 from main.permissions import IsPortfolioOwnerOrReadOnly
-from main.serializers import ProjectSerializer
+from main.serializers import ProjectSerializer,ExperienceSerializer,ContactSerializer
 
 
 @api_view(["GET", "HEAD", "POST"])
@@ -70,3 +70,91 @@ def project_star(request, project_id):
         project.starred_by.add(request.user)
     serializer = ProjectSerializer(project, context={"request": request})
     return Response(serializer.data)
+
+# --- EXPERIENCE VIEWS ---
+@api_view(["GET", "HEAD", "POST"])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsPortfolioOwnerOrReadOnly])
+def experience_list(request):
+    if request.method in ("GET", "HEAD"):
+        experiences = Experience.objects.prefetch_related("starred_by").order_by("-start_date")
+        title = request.query_params.get("title", "").strip()
+        if title:
+            experiences = experiences.filter(title__icontains=title)
+        serializer = ExperienceSerializer(
+            experiences, many=True, context={"request": request}
+        )
+        return Response(serializer.data)
+
+    serializer = ExperienceSerializer(data=request.data, context={"request": request})
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+@api_view(["GET", "HEAD", "PUT", "PATCH", "DELETE"])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsPortfolioOwnerOrReadOnly])
+def experience_detail(request, experience_id):
+    experience = get_object_or_404(
+        Experience.objects.prefetch_related("starred_by"), pk=experience_id
+    )
+    if request.method in ("GET", "HEAD"):
+        serializer = ExperienceSerializer(experience, context={"request": request})
+        return Response(serializer.data)
+    if request.method == "DELETE":
+        experience.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    serializer = ExperienceSerializer(
+        experience,
+        data=request.data,
+        partial=request.method == "PATCH",
+        context={"request": request},
+    )
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)
+
+@api_view(["POST"])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
+def experience_star(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+    if experience.starred_by.filter(pk=request.user.pk).exists():
+        experience.starred_by.remove(request.user)
+    else:
+        experience.starred_by.add(request.user)
+    serializer = ExperienceSerializer(experience, context={"request": request})
+    return Response(serializer.data)
+
+# --- CONTACT VIEWS ---
+@api_view(["GET", "POST"])
+@authentication_classes([SessionAuthentication])
+def contact_list(request):
+    if request.method == "GET":
+        # Hanya admin/owner yang bisa lihat list pesan masuk
+        if not request.user.is_authenticated:
+            return Response({"detail": "Not authorized to view contacts."}, status=status.HTTP_403_FORBIDDEN)
+        contacts = Contact.objects.all().order_by("-id")
+        serializer = ContactSerializer(contacts, many=True)
+        return Response(serializer.data)
+
+    elif request.method == "POST":
+        # Siapapun (publik) bisa ngirim pesan (POST)
+        serializer = ContactSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+@api_view(["GET", "DELETE"])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated]) # Hanya admin yang bisa akses detail/delete
+def contact_detail(request, contact_id):
+    contact = get_object_or_404(Contact, pk=contact_id)
+    if request.method == "GET":
+        serializer = ContactSerializer(contact)
+        return Response(serializer.data)
+    
+    if request.method == "DELETE":
+        contact.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

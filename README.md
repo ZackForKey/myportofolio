@@ -81,3 +81,43 @@ Saya menggunakan pendekatan vibe coding bersama AI untuk menyelesaikan kendala t
 3. **Mengapa JavaScript dapat menambah risiko XSS?** Template Django meng-escape nilai secara otomatis saat dirender sebagai teks. JavaScript yang memasukkan data server ke HTML dengan `innerHTML` dapat melewati perlindungan itu sehingga string berisi markup berbahaya mungkin dijalankan browser. Daftar Experience menggunakan `textContent`/pembuatan elemen DOM untuk teks, dan `ExperienceForm` menghapus tag HTML dari field teks di server.
 
 **AI disclosure dan penggunaan:** Saya menggunakan OpenAI Codex (GPT-6) sebagai asisten untuk membaca implementasi yang ada, memetakan persyaratan tugas, membantu perubahan AJAX/validasi/permission dan penanganan bug, serta menyusun tes dan dokumentasi ini. Strategi prompting yang digunakan adalah memberikan daftar persyaratan lengkap, meminta pemeriksaan repository sebelum perubahan, lalu memverifikasi alur dengan pemeriksaan Django dan tes. Area yang dibantu mencakup endpoint JSON dan add/star, JavaScript pencarian/modal/toast, sanitasi form, perbaikan logout dan pemuatan JavaScript proyek, migrasi, serta tes. Rujukan percakapan AI adalah sesi Codex pada tugas repository ini; tidak ada transkrip atau tautan percakapan terpisah yang dibuat. PDF `tugas-5.pdf` tidak tersedia di berkas repository saat implementasi, sehingga daftar persyaratan yang ditempelkan pada permintaan digunakan sebagai spesifikasi.
+
+
+### Tugas 6
+
+REST (Representational State Transfer) adalah sebuah gaya arsitektur perangkat lunak untuk sistem terdistribusi yang mendefinisikan sekumpulan aturan dan batasan (seperti client-server, stateless, cacheable, dan antarmuka yang seragam). Mengembalikan format JSON saja tidak cukup untuk menyebut sebuah API sebagai RESTful karena REST bukan sekadar format data. Sebuah API baru bisa disebut RESTful jika ia mematuhi prinsip-prinsip REST, terutama penggunaan HTTP methods (GET, POST, PUT, DELETE) yang semantik (sesuai tujuan operasinya), struktur URL/URI yang merepresentasikan resource (sumber daya) bukan kata kerja, serta tidak menyimpan state client di server (stateless).
+Perbedaan PUT dan PATCH:
+
+PUT: Mengganti atau menimpa keseluruhan representasi resource dengan data yang baru. Bersifat idempotent (dipanggil berkali-kali hasilnya sama).
+
+Contoh penggunaan: Memperbarui seluruh profil user sekaligus. Jika ada field yang tidak dikirim dalam request PUT, field tersebut umumnya akan diatur menjadi null atau default.
+
+PATCH: Melakukan modifikasi parsial (sebagian) pada resource.
+
+Contoh penggunaan: Hanya ingin memperbarui password atau mengubah is_active pada user tanpa harus mengirimkan ulang data nama, email, dan lainnya.
+
+Peran serializer pada Django REST Framework (DRF) adalah sebagai penerjemah (jembatan) antara tipe data kompleks bawaan Python (seperti QuerySet atau Model instance Django) menjadi tipe data native Python yang mudah di-render menjadi JSON, XML, atau format konten lainnya. Serializer juga bekerja sebaliknya (deserialization), yaitu memvalidasi dan mengubah data JSON yang masuk dari request kembali menjadi objek yang bisa disimpan ke database.
+Keuntungannya dibandingkan merakit dictionary manual dengan JsonResponse (Tutorial 05):
+
+Otomatisasi: Tidak perlu melakukan looping manual pada queryset dan memetakan field satu per satu ke dalam dictionary.
+
+Validasi Bawaan: Serializer menyediakan fungsi .is_valid() untuk memvalidasi tipe data, batas karakter, hingga aturan unik secara otomatis, mencegah data kotor masuk ke database.
+
+Relasi Model: Sangat mudah menangani relasi Foreign Key atau Many-to-Many (seperti prefetch_related) hanya dengan menambahkan parameter di class serializer.
+
+Perbedaan Autentikasi dan Otorisasi:
+
+Autentikasi (Authentication): Proses memverifikasi siapa pengguna tersebut (identitas). Contohnya mengecek apakah user sudah login dengan memverifikasi session cookie atau token JWT.
+
+Otorisasi (Authorization): Proses memverifikasi apa yang boleh dilakukan oleh pengguna yang sudah terautentikasi (hak akses). Contohnya memastikan user biasa tidak bisa menghapus data milik orang lain, meskipun ia sudah login.
+
+Mengapa harus diperiksa di server (dengan permission class)? Menyembunyikan tombol di template (HTML) hanyalah trik User Interface (UI). Seorang pengguna yang iseng atau jahat bisa dengan mudah membuka Postman, curl, atau console browser untuk menembak langsung endpoint penghapusan data (misal: DELETE /api/projects/1/). Jika server tidak memiliki permission class untuk mencegatnya, request tersebut akan berhasil. Oleh karena itu, keamanan sesungguhnya berada di level server, bukan sekadar menyembunyikan tombol di frontend.
+
+Mengapa perlu token CSRF pada SessionAuthentication:
+
+SessionAuthentication menggunakan cookie browser untuk menjaga sesi (session) login user. Masalahnya, browser secara otomatis akan menempelkan cookie ini pada setiap request yang mengarah ke domain server kita. Hal ini membuka celah keamanan Cross-Site Request Forgery (CSRF), di mana web jahat bisa mengelabui browser user untuk mengirim request (seperti POST, PUT, DELETE) ke server kita. Karena cookie ikut terkirim, server akan mengira itu adalah request sah dari user. Token CSRF bertindak sebagai "kata sandi sekali pakai" untuk membuktikan bahwa request modifikasi data tersebut benar-benar berasal dari form atau aplikasi kita sendiri, bukan dari web pihak ketiga.
+
+Mengapa force_authenticate tidak cukup untuk testing: Fungsi force_authenticate di DRF dirancang untuk melewati (bypass) seluruh middleware autentikasi dan pengecekan keamanan (termasuk CSRF) di DRF demi kecepatan dan kemudahan testing. Fitur ini memanipulasi request seolah-olah user sudah login tanpa melalui alur cookie HTTP yang sebenarnya. Akibatnya, jika aplikasi kita ternyata kehilangan perlindungan CSRF, test yang menggunakan force_authenticate akan tetap sukses/lulus (false positive). Untuk menguji CSRF dengan benar, kita harus menggunakan client.login() yang akan benar-benar mensimulasikan mekanisme cookie dan sesi HTTP secara nyata.
+
+AI Disclosure:
+Dalam pengerjaan Tugas 6 ini, saya menggunakan bantuan AI (Google Gemini) untuk menyusun, merapikan, dan mengembangkan jawaban pada poin 1, 2, 3, dan 4 agar lebih komprehensif dan terstruktur.
